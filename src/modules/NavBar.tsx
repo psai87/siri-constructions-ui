@@ -1,44 +1,37 @@
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const navItems = [
-    { name: "About", path: "/siri-constructions-ui/" },
-    { name: "Contact", path: "/siri-constructions-ui/contact" },
+    {name: "About", path: "/siri-constructions-ui/"},
+    {name: "Contact", path: "/siri-constructions-ui/contact"},
     {
-        name: "Services",
-        submenu: [
-            { name: "Todo", path: "/siri-constructions-ui/services/todo" },
-            { name: "Edit", path: "/siri-constructions-ui/services/edit" },
-        ],
+        name: "Services"
     },
     {
         name: "Projects",
         submenu: [
-            { name: "Current Projects", path: "/siri-constructions-ui/projects/current" },
-            { name: "Previous Projects", path: "/siri-constructions-ui/projects/previous" },
-            { name: "Edit Projects", path: "/siri-constructions-ui/projects/edit" },
-        ],
-    },
-    {
-        name: "Clients",
-        submenu: [
-            { name: "Prestigious Clients", path: "/siri-constructions-ui/clients/prestigious" },
-            { name: "Edit Clients", path: "/siri-constructions-ui/clients/edit" },
+            {name: "Current Projects", path: "/siri-constructions-ui/projects/current"},
+            {name: "Previous Projects", path: "/siri-constructions-ui/projects/previous"}
         ],
     },
     {
         name: "Employees",
         submenu: [
-            { name: "View Employees", path: "/siri-constructions-ui/employees/view" },
-            { name: "View Timesheets", path: "/siri-constructions-ui/employees/timesheets" },
-            { name: "Edit Timesheets", path: "/siri-constructions-ui/employees/edit" },
+            {name: "View Employees", path: "/siri-constructions-ui/employees/view"}
         ],
     },
-    { name: "Login", path: "/siri-constructions-ui/login" },
+    {
+        name: "Admin",
+        submenu: [
+            {name: "Login", path: "/siri-constructions-ui/login"},
+            {name: "Edit", path: "/siri-constructions-ui/edit"}
+        ],
+    },
 ];
 
 export default function Navbar() {
     return (
-        <div className="navbar bg-base-100 border-b border-gray-200 shadow-xl fixed top-0 w-full z-50 px-4 md:px-8 py-4" data-theme="light">
+        <div className="navbar bg-base-100 border-b border-gray-200 shadow-xl fixed top-0 w-full z-50 px-4 md:px-8 py-4"
+             data-theme="light">
             {/* Brand */}
             <div className="flex-1 flex items-center gap-6">
                 <a className="text-2xl font-extrabold text-primary">
@@ -86,7 +79,7 @@ export default function Navbar() {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none"
                          viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                              d="M4 6h16M4 12h16M4 18h16" />
+                              d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </label>
                 <ul
