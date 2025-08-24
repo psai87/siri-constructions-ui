@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 const navItems = [
     { name: "About", path: "/siri-constructions-ui/" },
+    { name: "Contact", path: "/siri-constructions-ui/contact" },
     {
         name: "Services",
         submenu: [
@@ -24,7 +25,6 @@ const navItems = [
             { name: "Edit Clients", path: "/siri-constructions-ui/clients/edit" },
         ],
     },
-    { name: "Contact", path: "/siri-constructions-ui/contact" },
     {
         name: "Employees",
         submenu: [
