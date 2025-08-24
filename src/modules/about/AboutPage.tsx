@@ -1,7 +1,7 @@
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen bg-base-100 text-base-content pt-24" data-theme="light">
+        <div className="min-h-screen bg-base-100 text-base-content" data-theme="light">
             {/* Hero Section */}
             <section className="px-8 py-16 max-w-6xl mx-auto">
                 <h1 className="text-5xl font-extrabold mb-8 text-primary">About Us</h1>
