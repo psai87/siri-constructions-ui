@@ -60,7 +60,6 @@ export default function AboutPage() {
                             <li>Day-to-day manpower: As per project scale</li>
                         </ul>
                     </li>
-                    <li><strong>Average Annual Turnover:</strong> ₹10.4 Crores</li>
                 </ul>
             </section>
 
