@@ -19,7 +19,7 @@ export default function AboutPage() {
             </section>
 
             {/* Services Section */}
-            <section className="px-8 py-16 bg-base-200">
+            <section className="px-8 py-16 bg-base-200 rounded-lg max-w-6xl mx-auto mb-12">
                 <div className="max-w-6xl mx-auto">
                     <h2 className="text-4xl font-bold mb-6 text-primary">Our Services</h2>
                     <ul className="list-disc pl-6 space-y-3 text-lg">
