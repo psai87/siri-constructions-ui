@@ -1,0 +1,32 @@
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Navbar from "./modules/NavBar.tsx";
+import AboutPage from "./modules/about/AboutPage.tsx";
+import ContactPage from "./modules/contact/ContactPage.tsx";
+
+// Import other pages as needed
+
+export default function App() {
+    return (
+        <Router>
+            <div data-theme="light" className="min-h-screen bg-base-100">
+                <Navbar/>
+                <Routes>
+                    <Route path="/siri-constructions-ui/" element={<AboutPage/>}/>
+                    {<Route path="/siri-constructions-ui/contact" element={<ContactPage/>}/>}
+                    {/*<Route path="/services/todo" element={<ServicesPage />} />*/}
+                    {/*<Route path="/services/edit" element={<ServicesPage />} />*/}
+                    {/*<Route path="/projects/current" element={<div>Current Projects</div>} />*/}
+                    {/*<Route path="/projects/previous" element={<div>Previous Projects</div>} />*/}
+                    {/*<Route path="/projects/edit" element={<div>Edit Projects</div>} />*/}
+                    {/*<Route path="/clients/prestigious" element={<div>Prestigious Clients</div>} />*/}
+                    {/*<Route path="/clients/edit" element={<div>Edit Clients</div>} />*/}
+                    {/*<Route path="/contact" element={<ContactPage />} />*/}
+                    {/*<Route path="/employees/view" element={<div>View Employees</div>} />*/}
+                    {/*<Route path="/employees/timesheets" element={<div>View Timesheets</div>} />*/}
+                    {/*<Route path="/employees/edit" element={<div>Edit Timesheets</div>} />*/}
+                    {/*<Route path="/login" element={<div>Login Page</div>} />*/}
+                </Routes>
+            </div>
+        </Router>
+    );
+}
