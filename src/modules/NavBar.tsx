@@ -2,9 +2,9 @@ import {Link} from "react-router-dom";
 
 const navItems = [
     {name: "About", path: "/siri-constructions-ui/"},
-    {name: "Contact", path: "/siri-constructions-ui/contact"},
+    {name: "Contact", path: "/siri-constructions-ui/contact/"},
     {
-        name: "Services"
+        name: "Services", path: "/siri-constructions-ui/service/"
     },
     {
         name: "Projects",
