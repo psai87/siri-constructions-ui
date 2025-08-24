@@ -43,7 +43,7 @@ export default function ContactPage() {
                         <div className="w-full h-96 rounded-lg overflow-hidden shadow-lg">
                             <iframe
                                 title="Siri Constructions Location"
-                                src="https://www.google.com/maps/embed?pb=!4v1755999497276!6m8!1m7!1sW7sY2r6djSqPI9Q--ymnbA!2m2!1d17.67982067982893!2d83.19501844363816!3f193.29970465428366!4f-2.1175374648310736!5f1.1924812503605782"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d197.60462856735103!2d83.20132524000337!3d17.68131936758084!2m3!1f0!2f5.2750368186769805!3f0!3m2!1i1024!2i768!4f52.905467083292!3m3!1m2!1s0x3a39690abcd16361%3A0x4bb01a797b56d1fe!2s26-48-3%2C%20Chaitanya%20Nagar%2C%20Gajuwaka%2C%20Visakhapatnam%2C%20Andhra%20Pradesh%20530026%2C%20India!5e1!3m2!1sen!2sus!4v1756002393910!5m2!1sen!2sus"
                                 width="100%"
                                 height="100%"
                                 className="border-0"
