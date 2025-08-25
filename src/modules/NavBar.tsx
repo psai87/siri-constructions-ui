@@ -101,7 +101,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            <div className="drawer-side pt-15">
+            <div className="drawer-side pt-19">
                 <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
                 <ul
                     tabIndex={0}
