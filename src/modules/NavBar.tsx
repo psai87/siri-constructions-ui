@@ -22,8 +22,7 @@ const navItems = [
     {
         name: "Admin",
         submenu: [
-            {name: "Login", path: "/siri-constructions-ui/login"},
-            {name: "Edit", path: "/siri-constructions-ui/edit"}
+            {name: "Login", path: "/siri-constructions-ui/login"}
         ],
     },
 ];
@@ -81,7 +80,7 @@ export default function Navbar() {
                     </div>
 
 
-                    <div className="flex-none lg:hidden">
+                    <div className="flex-none">
                         <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +105,7 @@ export default function Navbar() {
                 <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
                 <ul
                     tabIndex={0}
-                    className="dropdown-content menu p-2 shadow-xl bg-base-100 rounded-box w-60 mt-4"
+                    className="dropdown-content menu shadow-xl bg-base-100 rounded-box min-h-full w-80 p-4 text-lg"
                 >
                     {navItems.map((item, idx) =>
                         item.submenu ? (

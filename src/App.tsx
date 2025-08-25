@@ -1,7 +1,8 @@
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Navbar from "./modules/NavBar.tsx";
 import AboutPage from "./modules/about/AboutPage.tsx";
 import ContactPage from "./modules/contact/ContactPage.tsx";
+import LoginPage from "./modules/login/LoginPage.tsx";
 
 // Import other pages as needed
 
@@ -12,7 +13,7 @@ export default function App() {
                 <Navbar/>
                 <Routes>
                     <Route path="/siri-constructions-ui/" element={<AboutPage/>}/>
-                    {<Route path="/siri-constructions-ui/contact" element={<ContactPage/>}/>}
+                    <Route path="/siri-constructions-ui/contact" element={<ContactPage/>}/>
                     {/*<Route path="/services/todo" element={<ServicesPage />} />*/}
                     {/*<Route path="/services/edit" element={<ServicesPage />} />*/}
                     {/*<Route path="/projects/current" element={<div>Current Projects</div>} />*/}
@@ -24,7 +25,7 @@ export default function App() {
                     {/*<Route path="/employees/view" element={<div>View Employees</div>} />*/}
                     {/*<Route path="/employees/timesheets" element={<div>View Timesheets</div>} />*/}
                     {/*<Route path="/employees/edit" element={<div>Edit Timesheets</div>} />*/}
-                    {/*<Route path="/login" element={<div>Login Page</div>} />*/}
+                    <Route path="/siri-constructions-ui/login" element={<LoginPage/>}/>
                 </Routes>
             </div>
         </Router>
