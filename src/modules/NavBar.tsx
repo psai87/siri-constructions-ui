@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import type {Menu} from "../model/Menu.ts";
+import type {JSX} from "react";
 
 const navItems: Menu[] = [
     {name: "About", path: "/siri-constructions-ui/"} as Menu,
@@ -48,6 +49,26 @@ const navAdminItems: Menu[] = navItems.slice(0, -1)
         ] as Menu[],
     } as Menu)
 
+function renderMenuItems(items: Menu[]): JSX.Element[] {
+    return items.map((item, idx) =>
+        item.submenu ? (
+            <li key={idx}>
+                <details className="w-full">
+                    <summary className="cursor-pointer">{item.name}</summary>
+                    <ul className="pl-4 mt-2 space-y-1">
+                        {renderMenuItems(item.submenu)}
+                    </ul>
+                </details>
+            </li>
+        ) : (
+            <li key={idx}>
+                <Link to={item.path ?? ""}>{item.name}</Link>
+            </li>
+        )
+    );
+}
+
+
 export default function Navbar() {
     return (
         <div className="drawer">
@@ -78,8 +99,8 @@ export default function Navbar() {
                     </div>
 
                     {/* Brand */}
-                    <div className="flex-1 flex items-center gap-6">
-                        <a className="text-2xl font-extrabold text-primary">
+                    <div className="flex-1 flex items-center gap-6 pl-1">
+                        <a className="text-2xl font-extrabold text-primary ">
                             Siri Constructions
                         </a>
                     </div>
@@ -127,26 +148,7 @@ export default function Navbar() {
                     tabIndex={0}
                     className="dropdown-content menu shadow-xl bg-base-100 rounded-box min-h-full w-80 p-4 text-lg"
                 >
-                    {navAdminItems.map((item: Menu, idx: number) =>
-                        item.submenu ? (
-                            <li key={idx} className="dropdown dropdown-end">
-                                <details>
-                                    <summary className="cursor-pointer">{item.name}</summary>
-                                    <ul className="pl-4 mt-2 space-y-1">
-                                        {item.submenu.map((sub: Menu, subIdx: number) => (
-                                            <li key={subIdx}>
-                                                <Link to={sub.path ?? "/siri-constructions-ui/"}>{sub.name}</Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </details>
-                            </li>
-                        ) : (
-                            <li key={idx}>
-                                <Link to={item.path ?? ""}>{item.name}</Link>
-                            </li>
-                        )
-                    )}
+                    {renderMenuItems(navAdminItems)}
                 </ul>
             </div>
         </div>

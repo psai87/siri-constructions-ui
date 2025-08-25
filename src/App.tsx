@@ -20,7 +20,7 @@ export default function App() {
                 <Routes>
                     <Route path="/siri-constructions-ui/" element={<AboutPage/>}/>
                     <Route path="/siri-constructions-ui/contact" element={<ContactPage/>}/>
-                    {<Route path="/siri-constructions-ui/service/edit"
+                    {<Route path="/siri-constructions-ui/services/edit"
                             element={<EditServicePage alerts={alerts} setAlerts={setAlerts}/>}/>}
                     {/*<Route path="/projects/current" element={<div>Current Projects</div>} />*/}
                     {/*<Route path="/projects/previous" element={<div>Previous Projects</div>} />*/}
