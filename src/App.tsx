@@ -3,6 +3,7 @@ import Navbar from "./modules/NavBar.tsx";
 import AboutPage from "./modules/about/AboutPage.tsx";
 import ContactPage from "./modules/contact/ContactPage.tsx";
 import LoginPage from "./modules/login/LoginPage.tsx";
+import EditServicePage from "./modules/service/EditServicePage.tsx";
 
 // Import other pages as needed
 
@@ -14,8 +15,7 @@ export default function App() {
                 <Routes>
                     <Route path="/siri-constructions-ui/" element={<AboutPage/>}/>
                     <Route path="/siri-constructions-ui/contact" element={<ContactPage/>}/>
-                    {/*<Route path="/services/todo" element={<ServicesPage />} />*/}
-                    {/*<Route path="/services/edit" element={<ServicesPage />} />*/}
+                    {<Route path="/siri-constructions-ui/service/edit" element={<EditServicePage/>}/>}
                     {/*<Route path="/projects/current" element={<div>Current Projects</div>} />*/}
                     {/*<Route path="/projects/previous" element={<div>Previous Projects</div>} />*/}
                     {/*<Route path="/projects/edit" element={<div>Edit Projects</div>} />*/}

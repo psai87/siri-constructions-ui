@@ -1,5 +1,5 @@
-import {AuthState, host} from "../../model/Constants.ts";
-import type AuthenticateResponse from "../../model/AuthenticateResponse.ts";
+import {AuthState, host} from "../model/Constants.ts";
+import type AuthenticateResponse from "../model/AuthenticateResponse.ts";
 
 
 export default class AuthenticateClient {

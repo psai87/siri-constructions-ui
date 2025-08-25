@@ -1,6 +1,6 @@
 import {AuthState} from "../../model/Constants.ts";
 import type {ChangeEvent} from "react";
-import AuthenticateClient from "../clients/AuthenticateClient.ts";
+import AuthenticateClient from "../../client/AuthenticateClient.ts";
 
 export default function LoginPage() {
     const authenticateClient: AuthenticateClient = new AuthenticateClient();

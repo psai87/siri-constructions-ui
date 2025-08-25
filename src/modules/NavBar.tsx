@@ -1,30 +1,36 @@
 import {Link} from "react-router-dom";
+import type {Menu, MenuItem} from "../model/Menu.ts";
 
-const navItems = [
-    {name: "About", path: "/siri-constructions-ui/"},
-    {name: "Contact", path: "/siri-constructions-ui/contact/"},
+const navItems: Menu[] = [
+    {name: "About", path: "/siri-constructions-ui/"} as Menu,
+    {name: "Contact", path: "/siri-constructions-ui/contact/"} as Menu,
+    //{name: "Services", path: "/siri-constructions-ui/service/"} as Menu,
     {
-        name: "Services", path: "/siri-constructions-ui/service/"
-    },
+        name: "Service",
+        submenu: [
+            {name: "View Service", path: "/siri-constructions-ui/service/view"},
+            {name: "Edit Service", path: "/siri-constructions-ui/service/edit"}
+        ] as MenuItem[],
+    } as Menu,
     {
         name: "Projects",
         submenu: [
             {name: "Current Projects", path: "/siri-constructions-ui/projects/current"},
             {name: "Previous Projects", path: "/siri-constructions-ui/projects/previous"}
-        ],
-    },
+        ] as MenuItem[],
+    } as Menu,
     {
         name: "Employees",
         submenu: [
             {name: "View Employees", path: "/siri-constructions-ui/employees/view"}
-        ],
-    },
+        ] as MenuItem[],
+    } as Menu,
     {
         name: "Admin",
         submenu: [
             {name: "Login", path: "/siri-constructions-ui/login"}
-        ],
-    },
+        ] as MenuItem[],
+    } as Menu,
 ];
 
 export default function Navbar() {
@@ -47,7 +53,7 @@ export default function Navbar() {
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex gap-4 items-center">
-                        {navItems.map((item, idx) =>
+                        {navItems.map((item: Menu, idx: number) =>
                             item.submenu ? (
                                 <div key={idx} className="dropdown dropdown-hover relative">
                                     <label
@@ -60,7 +66,7 @@ export default function Navbar() {
                                         tabIndex={idx}
                                         className="dropdown-content menu p-3 shadow-xl bg-base-100 rounded-lg w-52 text-base mt-1.5"
                                     >
-                                        {item.submenu.map((sub, subIdx) => (
+                                        {item.submenu.map((sub: MenuItem, subIdx: number) => (
                                             <li key={subIdx}>
                                                 <Link to={sub.path}>{sub.name}</Link>
                                             </li>
@@ -70,7 +76,7 @@ export default function Navbar() {
                             ) : (
                                 <Link
                                     key={idx}
-                                    to={item.path}
+                                    to={item.path ?? ""}
                                     className="px-4 py-2 text-lg font-semibold rounded-lg hover:bg-primary hover:text-white transition-all"
                                 >
                                     {item.name}
@@ -107,13 +113,13 @@ export default function Navbar() {
                     tabIndex={0}
                     className="dropdown-content menu shadow-xl bg-base-100 rounded-box min-h-full w-80 p-4 text-lg"
                 >
-                    {navItems.map((item, idx) =>
+                    {navItems.map((item: Menu, idx: number) =>
                         item.submenu ? (
                             <li key={idx} className="dropdown dropdown-end">
                                 <details>
                                     <summary className="cursor-pointer">{item.name}</summary>
                                     <ul className="pl-4 mt-2 space-y-1">
-                                        {item.submenu.map((sub, subIdx) => (
+                                        {item.submenu.map((sub: MenuItem, subIdx: number) => (
                                             <li key={subIdx}>
                                                 <Link to={sub.path}>{sub.name}</Link>
                                             </li>
@@ -123,7 +129,7 @@ export default function Navbar() {
                             </li>
                         ) : (
                             <li key={idx}>
-                                <Link to={item.path}>{item.name}</Link>
+                                <Link to={item.path ?? ""}>{item.name}</Link>
                             </li>
                         )
                     )}
