@@ -4,51 +4,36 @@ import type {Image} from "../../model/Image.ts";
 import {availableServiceClient} from "../../client/AvailableServiceClient.ts";
 import {imageClient} from "../../client/ImageClient.ts";
 import {imageUtil} from "../../common/ImageUtil.ts";
+import type {AlertsProps} from "../../model/Props.ts";
 
-export default function EditServicePage() {
-
-    const defaultService = (uuid: string): AvailableService => {
-        return {
-            id: uuid,
-            name: "",
-            description: ""
-        };
+const defaultService = (uuid: string): AvailableService => {
+    return {
+        id: uuid,
+        name: "",
+        description: ""
     };
-    const defaultImage = (uuid: string, defaultService: AvailableService): Image => {
-        return {
-            id: uuid,
-            refId: defaultService.id,
-            description: null,
-            image: ""
-        }
+};
+const defaultImage = (uuid: string, defaultService: AvailableService): Image => {
+    return {
+        id: uuid,
+        refId: defaultService.id,
+        description: null,
+        image: ""
     }
+}
+
+export default function EditServicePage({setAlerts}: AlertsProps) {
+
     const [service, setService] = useState<AvailableService[]>([]);
     const [serviceForm, setServiceForm] = useState<AvailableService>(defaultService(crypto.randomUUID()));
     const [selectedService, setSelectedService] = useState<AvailableService | null>(null);
-    const [_, setSelectedImage] = useState<Image | null>(null);
     const [imageForm, setImageForm] = useState<Image>(defaultImage(crypto.randomUUID(), serviceForm));
     const [previewUrl, setPreviewUrl] = useState<string>("/siri-constructions-ui/preview_image.png");
     const isInvalid: boolean = !serviceForm.name.trim() || !serviceForm.description.trim() || !imageForm.image;
-    const [alerts, setAlerts] = useState<{ id: number, type: "success" | "error"; message: string }[]>([])
-
-    useEffect(() => {
-        setTimeout(function () {
-            setAlerts(prevState => prevState.filter(data => data.id > Date.now()));
-        }, 5000);
-    }, [alerts]);
 
     useEffect(() => {
         callAvailableService()
     }, []);
-
-    function callAvailableService() {
-        availableServiceClient.getAvailableService()
-            .then(response => {
-                setService(response);
-                console.log("Available service loaded");
-            })
-            .catch(error => console.log(error))
-    }
 
     useEffect(() => {
         if (!imageForm || !imageForm.image) {
@@ -64,26 +49,43 @@ export default function EditServicePage() {
         };
     }, [imageForm]);
 
+    function callAvailableService() {
+        availableServiceClient.getAvailableService()
+            .then(response => {
+                setService(response);
+                console.log("Available service loaded");
+            })
+            .catch(error => console.log(error))
+    }
+
+    const resetForm = () => {
+        const newService = defaultService(crypto.randomUUID());
+        const newImage = defaultImage(crypto.randomUUID(), newService);
+        setServiceForm(newService);
+        setImageForm(newImage);
+        setSelectedService(null);
+    };
+
+    const showAlert = (type: "success" | "error", message: string) => {
+        const id = Date.now();
+        setAlerts((prev) => [...prev, {id, type, message}]);
+    };
+
     const handleSelectService = (selectedValue: string) => {
-        const newService: AvailableService = defaultService(crypto.randomUUID());
-        const newImage: Image = defaultImage(crypto.randomUUID(), newService);
+        resetForm()
         if (!selectedValue || !selectedValue.trim()) {
-            setServiceForm(newService);
-            setImageForm(newImage);
-            setSelectedImage(null);
-            setSelectedService(null);
             return;
         }
-
         const selectedService: AvailableService | undefined = service.find((availableService: AvailableService) => availableService.id === selectedValue);
-        setSelectedService(selectedService ?? null);
-        setServiceForm(selectedService ?? newService);
         if (selectedService) {
+            setSelectedService(selectedService);
+            setServiceForm(selectedService);
             imageClient
                 .getImages(selectedService.id)
                 .then(response => {
-                    setSelectedImage(response[0] ?? null)
-                    setImageForm(response[0] ?? newImage)
+                    if (response && response.length > 0) {
+                        setImageForm(response[0])
+                    }
                 });
         }
     };
@@ -99,7 +101,6 @@ export default function EditServicePage() {
             file.arrayBuffer()
                 .then(data => {
                     setImageForm({...imageForm, image: imageUtil.arrayBufferToBase64(data)})
-
                 });
         }
     };
@@ -112,21 +113,13 @@ export default function EditServicePage() {
             })
             .then(() => {
                 console.log("Service created");
-                setAlerts(prevState => [...prevState, {
-                    id: Date.now(),
-                    type: "success",
-                    message: "Service created"
-                }])
-                handleSelectService("");
+                showAlert("success", "Service created")
+                resetForm();
                 callAvailableService()
             })
             .catch(error => {
                 console.log("Create failed", error)
-                setAlerts(prevState => [...prevState, {
-                    id: Date.now(),
-                    type: "error",
-                    message: error.message
-                }])
+                showAlert(error, error.message)
             });
     };
 
@@ -138,21 +131,13 @@ export default function EditServicePage() {
             })
             .then(() => {
                 console.log("Service updated");
-                setAlerts(prevState => [...prevState, {
-                    id: Date.now(),
-                    type: "success",
-                    message: "Service created"
-                }])
-                handleSelectService("");
+                showAlert("success", "Service updated")
+                resetForm();
                 callAvailableService()
             })
             .catch(error => {
                 console.log("Update failed", error)
-                setAlerts(prevState => [...prevState, {
-                    id: Date.now(),
-                    type: "error",
-                    message: error.message
-                }])
+                showAlert(error, error.message)
             });
     };
 
@@ -164,11 +149,13 @@ export default function EditServicePage() {
             })
             .then(() => {
                 console.log("Service deleted");
-                handleSelectService("");
+                showAlert("success", "Service deleted")
+                resetForm();
                 callAvailableService()
             })
             .catch(error => {
                 console.log("delete failed", error)
+                showAlert(error, error.message)
             });
     };
 
@@ -205,7 +192,7 @@ export default function EditServicePage() {
                     {/* ID */}
                     <div className="form-control">
                         <label className="label">
-                            <span className="label-text font-semibold">ID</span>
+                            <span className="label-text font-semibold">ID:&nbsp;</span>
                         </label>
                         <label className="label">
                             <span className="label-text">{serviceForm.id}</span>
@@ -285,14 +272,6 @@ export default function EditServicePage() {
                         />
                     </div>
                 </div>
-
-                {alerts.map((alert) => (
-                    <div className="toast toast-end" key={alert.id}>
-                        <div className={alert.type === 'success' ? "alert alert-success" : "alert alert-er"}>
-                            <span>{alert.message}</span>
-                        </div>
-                    </div>
-                ))}
             </div>
         </div>
     );

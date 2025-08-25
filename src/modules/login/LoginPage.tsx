@@ -1,8 +1,9 @@
 import {AuthState} from "../../model/Constants.ts";
 import type {ChangeEvent} from "react";
 import AuthenticateClient from "../../client/AuthenticateClient.ts";
+import type {AlertsProps} from "../../model/Props.ts";
 
-export default function LoginPage() {
+export default function LoginPage({setAlerts}: AlertsProps) {
     const authenticateClient: AuthenticateClient = new AuthenticateClient();
 
     function handleTokenChange(value: string) {
@@ -13,12 +14,18 @@ export default function LoginPage() {
         authenticateClient.authenticate()
             .then(() => {
                 console.log("Authentication Successful")
+                showAlert("success", "Authentication Successful");
             })
             .catch(err => {
                 console.log(err)
-                console.log("Authentication Failed")
+                showAlert("error", "Authentication Failed");
             });
     }
+
+    const showAlert = (type: "success" | "error", message: string) => {
+        const id = Date.now();
+        setAlerts((prev) => [...prev, {id, type, message}]);
+    };
 
     return (
         <div className="flex items-center justify-center h-screen bg-gradient-to-br from-white to-blue-100 p-6">

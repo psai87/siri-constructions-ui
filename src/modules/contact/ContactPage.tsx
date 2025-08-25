@@ -21,7 +21,7 @@ export default function ContactPage() {
                     <div className="card bg-base-200 shadow-xl rounded-lg p-8">
                         <h2 className="text-2xl font-bold mb-4 text-primary">Email Us</h2>
                         <ul className="text-lg leading-relaxed space-y-2">
-                            <li>General Enquiries: <a href="mailto:siricons@yahoo.co.in" className="text-primary underline">siricons@yahoo.co.in</a></li>
+                            <li>General Enquiries: <a href="mailto:siricons.mep@gmail.com" className="text-primary underline">siricons.mep@gmail.com</a></li>
                         </ul>
                     </div>
 
@@ -32,7 +32,7 @@ export default function ContactPage() {
                             <li>
                                 <strong>Mr. S. Venkateswara Rao</strong> – Proprietor<br />
                                 Phone: <a href="tel:+919963111350" className="text-primary underline">+91 9963111350</a><br />
-                                Email: <a href="mailto:siricons@yahoo.co.in" className="text-primary underline">siricons@yahoo.co.in</a>
+                                Email: <a href="mailto:siricons.mep@gmail.com" className="text-primary underline">siricons.mep@gmail.com</a>
                             </li>
                         </ul>
                     </div>

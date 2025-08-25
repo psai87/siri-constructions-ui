@@ -1,41 +1,56 @@
 import {Link} from "react-router-dom";
-import type {Menu, MenuItem} from "../model/Menu.ts";
+import type {Menu} from "../model/Menu.ts";
 
 const navItems: Menu[] = [
     {name: "About", path: "/siri-constructions-ui/"} as Menu,
     {name: "Contact", path: "/siri-constructions-ui/contact/"} as Menu,
-    //{name: "Services", path: "/siri-constructions-ui/service/"} as Menu,
-    {
-        name: "Service",
-        submenu: [
-            {name: "View Service", path: "/siri-constructions-ui/service/view"},
-            {name: "Edit Service", path: "/siri-constructions-ui/service/edit"}
-        ] as MenuItem[],
-    } as Menu,
+    {name: "Services", path: "/siri-constructions-ui/services/"} as Menu,
     {
         name: "Projects",
         submenu: [
             {name: "Current Projects", path: "/siri-constructions-ui/projects/current"},
             {name: "Previous Projects", path: "/siri-constructions-ui/projects/previous"}
-        ] as MenuItem[],
+        ] as Menu[],
     } as Menu,
     {
-        name: "Employees",
-        submenu: [
-            {name: "View Employees", path: "/siri-constructions-ui/employees/view"}
-        ] as MenuItem[],
+        name: "Employees", path: "/siri-constructions-ui/employees"
     } as Menu,
     {
         name: "Admin",
         submenu: [
             {name: "Login", path: "/siri-constructions-ui/login"}
-        ] as MenuItem[],
+        ] as Menu[],
     } as Menu,
 ];
 
+const navAdminItems: Menu[] = navItems.slice(0, -1)
+    .concat({
+        name: "Admin",
+        submenu: [
+            {name: "Login", path: "/siri-constructions-ui/login"},
+            {
+                name: "Services",
+                submenu: [{name: "Edit Service", path: "/siri-constructions-ui/service/edit"}] as Menu[],
+            } as Menu,
+            {
+                name: "Projects",
+                submenu: [{name: "Edit Project", path: "/siri-constructions-ui/project/edit"}] as Menu[],
+            } as Menu,
+            {
+                name: "Employees",
+                submenu: [{name: "Edit Employee", path: "/siri-constructions-ui/employee/edit"}] as Menu[],
+            } as Menu,
+            {
+                name: "Timesheets",
+                submenu: [{name: "View Timesheet", path: "/siri-constructions-ui/timesheet/view"},
+                    {name: "Edit Timesheet", path: "/siri-constructions-ui/timesheet/edit"}] as Menu[],
+            } as Menu
+        ] as Menu[],
+    } as Menu)
+
 export default function Navbar() {
     return (
-        <div className="drawer drawer-end">
+        <div className="drawer">
             <input id="my-drawer-3" type="checkbox" className="drawer-toggle"/>
             <div className="drawer-content flex flex-col">
 
@@ -43,6 +58,24 @@ export default function Navbar() {
                 <div
                     className="navbar bg-base-100 border-b border-gray-200 shadow-xl fixed top-0 w-full z-50 px-4 md:px-8 py-4"
                     data-theme="light">
+
+                    <div className="flex-none">
+                        <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                className="inline-block h-6 w-6 stroke-current"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M4 6h16M4 12h16M4 18h16"
+                                ></path>
+                            </svg>
+                        </label>
+                    </div>
 
                     {/* Brand */}
                     <div className="flex-1 flex items-center gap-6">
@@ -66,9 +99,9 @@ export default function Navbar() {
                                         tabIndex={idx}
                                         className="dropdown-content menu p-3 shadow-xl bg-base-100 rounded-lg w-52 text-base mt-1.5"
                                     >
-                                        {item.submenu.map((sub: MenuItem, subIdx: number) => (
+                                        {item.submenu.map((sub: Menu, subIdx: number) => (
                                             <li key={subIdx}>
-                                                <Link to={sub.path}>{sub.name}</Link>
+                                                <Link to={sub.path ?? "/siri-constructions-ui/"}>{sub.name}</Link>
                                             </li>
                                         ))}
                                     </ul>
@@ -85,25 +118,6 @@ export default function Navbar() {
                         )}
                     </div>
 
-
-                    <div className="flex-none">
-                        <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                className="inline-block h-6 w-6 stroke-current"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                ></path>
-                            </svg>
-                        </label>
-                    </div>
-
                 </div>
             </div>
 
@@ -113,15 +127,15 @@ export default function Navbar() {
                     tabIndex={0}
                     className="dropdown-content menu shadow-xl bg-base-100 rounded-box min-h-full w-80 p-4 text-lg"
                 >
-                    {navItems.map((item: Menu, idx: number) =>
+                    {navAdminItems.map((item: Menu, idx: number) =>
                         item.submenu ? (
                             <li key={idx} className="dropdown dropdown-end">
                                 <details>
                                     <summary className="cursor-pointer">{item.name}</summary>
                                     <ul className="pl-4 mt-2 space-y-1">
-                                        {item.submenu.map((sub: MenuItem, subIdx: number) => (
+                                        {item.submenu.map((sub: Menu, subIdx: number) => (
                                             <li key={subIdx}>
-                                                <Link to={sub.path}>{sub.name}</Link>
+                                                <Link to={sub.path ?? "/siri-constructions-ui/"}>{sub.name}</Link>
                                             </li>
                                         ))}
                                     </ul>
