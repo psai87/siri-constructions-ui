@@ -4,12 +4,12 @@ import type {Image} from "../model/Image.ts";
 export default class ImageClient {
     imageUrl: string = host + "/siricons/image";
 
-    async getImages(refId: string): Promise<Image[]> {
-        const params = {ref_id: refId};
-        const urlParams = new URLSearchParams(params as Record<string, string>);
+    async getImages(refIds: string[]): Promise<Image[]> {
+        const urlParams = new URLSearchParams();
+        refIds.forEach(refId => urlParams.append("ref_id", refId));
         const requestOptions: RequestInit = {
             method: 'GET',
-            headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${AuthState.token}`},
+            headers: {'Content-Type': 'application/json'},
         };
         const response: Response = await fetch(`${this.imageUrl}?${urlParams.toString()}`, requestOptions);
         if (!response.ok) {

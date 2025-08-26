@@ -3,9 +3,9 @@ import type {Menu} from "../model/Menu.ts";
 import type {JSX} from "react";
 
 const navItems: Menu[] = [
-    {name: "About", path: "/siri-constructions-ui/"} as Menu,
-    {name: "Contact", path: "/siri-constructions-ui/contact/"} as Menu,
-    {name: "Services", path: "/siri-constructions-ui/services/"} as Menu,
+    {name: "About", path: "/siri-constructions-ui"} as Menu,
+    {name: "Contact", path: "/siri-constructions-ui/contact"} as Menu,
+    {name: "Services", path: "/siri-constructions-ui/services"} as Menu,
     {
         name: "Projects",
         submenu: [
@@ -31,20 +31,20 @@ const navAdminItems: Menu[] = navItems.slice(0, -1)
             {name: "Login", path: "/siri-constructions-ui/login"},
             {
                 name: "Services",
-                submenu: [{name: "Edit Service", path: "/siri-constructions-ui/service/edit"}] as Menu[],
+                submenu: [{name: "Edit Service", path: "/siri-constructions-ui/services/edit"}] as Menu[],
             } as Menu,
             {
                 name: "Projects",
-                submenu: [{name: "Edit Project", path: "/siri-constructions-ui/project/edit"}] as Menu[],
+                submenu: [{name: "Edit Project", path: "/siri-constructions-ui/projects/edit"}] as Menu[],
             } as Menu,
             {
                 name: "Employees",
-                submenu: [{name: "Edit Employee", path: "/siri-constructions-ui/employee/edit"}] as Menu[],
+                submenu: [{name: "Edit Employee", path: "/siri-constructions-ui/employees/edit"}] as Menu[],
             } as Menu,
             {
                 name: "Timesheets",
-                submenu: [{name: "View Timesheet", path: "/siri-constructions-ui/timesheet/view"},
-                    {name: "Edit Timesheet", path: "/siri-constructions-ui/timesheet/edit"}] as Menu[],
+                submenu: [{name: "View Timesheet", path: "/siri-constructions-ui/timesheets/view"},
+                    {name: "Edit Timesheet", path: "/siri-constructions-ui/timesheets/edit"}] as Menu[],
             } as Menu
         ] as Menu[],
     } as Menu)

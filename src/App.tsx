@@ -7,6 +7,9 @@ import EditServicePage from "./modules/service/EditServicePage.tsx";
 import ToastBar from "./modules/ToastBar.tsx";
 import {useState} from "react";
 import type {AlertToast} from "./model/AlertToast.ts";
+import ViewServicePage from "./modules/service/ViewServicePage.tsx";
+import ViewEmployeePage from "./modules/employees/ViewEmployeePage.tsx";
+import EditEmployeePage from "./modules/employees/EditEmployeePage.tsx";
 
 // Import other pages as needed
 
@@ -18,20 +21,18 @@ export default function App() {
             <div data-theme="light" className="min-h-screen bg-base-100">
                 <Navbar/>
                 <Routes>
-                    <Route path="/siri-constructions-ui/" element={<AboutPage/>}/>
+                    <Route path="/siri-constructions-ui" element={<AboutPage/>}/>
                     <Route path="/siri-constructions-ui/contact" element={<ContactPage/>}/>
-                    {<Route path="/siri-constructions-ui/services/edit"
-                            element={<EditServicePage alerts={alerts} setAlerts={setAlerts}/>}/>}
-                    {/*<Route path="/projects/current" element={<div>Current Projects</div>} />*/}
-                    {/*<Route path="/projects/previous" element={<div>Previous Projects</div>} />*/}
-                    {/*<Route path="/projects/edit" element={<div>Edit Projects</div>} />*/}
-                    {/*<Route path="/clients/prestigious" element={<div>Prestigious Clients</div>} />*/}
-                    {/*<Route path="/clients/edit" element={<div>Edit Clients</div>} />*/}
-                    {/*<Route path="/contact" element={<ContactPage />} />*/}
-                    {/*<Route path="/employees/view" element={<div>View Employees</div>} />*/}
-                    {/*<Route path="/employees/timesheets" element={<div>View Timesheets</div>} />*/}
-                    {/*<Route path="/employees/edit" element={<div>Edit Timesheets</div>} />*/}
-                    <Route path="/siri-constructions-ui/login" element={<LoginPage alerts={alerts} setAlerts={setAlerts}/>}/>
+                    <Route path="/siri-constructions-ui/services/edit"
+                           element={<EditServicePage alerts={alerts} setAlerts={setAlerts}/>}/>
+                    <Route path="/siri-constructions-ui/services"
+                           element={<ViewServicePage alerts={alerts} setAlerts={setAlerts}/>}/>
+                    <Route path="/siri-constructions-ui/login"
+                           element={<LoginPage alerts={alerts} setAlerts={setAlerts}/>}/>
+                    <Route path="/siri-constructions-ui/employees"
+                           element={<ViewEmployeePage alerts={alerts} setAlerts={setAlerts}/>}/>
+                    <Route path="/siri-constructions-ui/employees/edit"
+                           element={<EditEmployeePage alerts={alerts} setAlerts={setAlerts}/>}/>
                 </Routes>
                 <ToastBar alerts={alerts} setAlerts={setAlerts}/>
             </div>

@@ -7,7 +7,7 @@ class AvailableServiceClient {
     async getAvailableService(): Promise<AvailableService[]> {
         const requestOptions: RequestInit = {
             method: 'GET',
-            headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${AuthState.token}`}
+            headers: {'Content-Type': 'application/json'}
         };
         const response: Response = await fetch(this.serviceUrl, requestOptions);
         if (!response.ok) {
