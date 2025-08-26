@@ -46,7 +46,7 @@ export default function ViewEmployeePage({setAlerts}: AlertsProps) {
                         </figure>
                         <div className="card-body">
                             <h3 className="card-title ">{employee.firstName} {employee.lastName}</h3>
-                            <p>{"Email: "} {employee.email}</p>
+                            <p>{employee.email}</p>
                         </div>
                     </div>
                 ))}
