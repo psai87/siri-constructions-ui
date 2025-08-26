@@ -41,7 +41,7 @@ export default function ViewEmployeePage({setAlerts}: AlertsProps) {
                         key={employee.id}
                         className="card card-side max-w-96 bg-base-100 shadow-xl border border-gray-200 "
                     >
-                        <figure className="h-40">
+                        <figure className="h-40 w-40">
                             <ImagePreview image={images.get(employee.id)}/>
                         </figure>
                         <div className="card-body">
