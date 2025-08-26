@@ -35,17 +35,17 @@ export default function ViewEmployeePage({setAlerts}: AlertsProps) {
 
     return (
         <div className="p-20">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="flex flex-wrap gap-6">
                 {employees.map((employee: Employee) => (
                     <div
                         key={employee.id}
-                        className="card card-side bg-base-100 shadow-xl border border-gray-200"
+                        className="card card-side max-w-96 bg-base-100 shadow-xl border border-gray-200 "
                     >
-                        <figure className="h-38">
+                        <figure className="h-40">
                             <ImagePreview image={images.get(employee.id)}/>
                         </figure>
                         <div className="card-body">
-                            <h3 className="card-title">{employee.firstName} {employee.lastName}</h3>
+                            <h3 className="card-title ">{employee.firstName} {employee.lastName}</h3>
                             <p>{"Email: "} {employee.email}</p>
                         </div>
                     </div>

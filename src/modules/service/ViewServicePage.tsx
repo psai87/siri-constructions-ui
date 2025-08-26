@@ -40,10 +40,10 @@ export default function ViewServicePage({setAlerts}: AlertsProps) {
                         key={service.id}
                         className="card max-w-150 bg-base-100 shadow-xl border border-gray-200"
                     >
-                        <figure className="h-48">
+                        <figure className="h-48 min-w-48">
                             <ImagePreview image={images.get(service.id)}/>
                         </figure>
-                        <div className="card-body">
+                        <div className="card-body min-w-48">
                             <h3 className="card-title">{service.name}</h3>
                             <p>{service.description}</p>
                         </div>
