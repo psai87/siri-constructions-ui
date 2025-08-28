@@ -3,20 +3,20 @@ import type {Menu} from "../model/Menu.ts";
 import type {JSX} from "react";
 
 const navItems: Menu[] = [
-    {name: "About", path: "/siri-constructions-ui"} as Menu,
-    {name: "Contact", path: "/siri-constructions-ui/contact"} as Menu,
-    {name: "Services", path: "/siri-constructions-ui/services"} as Menu,
+    {name: "About", path: "/"} as Menu,
+    {name: "Contact", path: "/contact"} as Menu,
+    {name: "Services", path: "/services"} as Menu,
     {
         name: "Projects",
-        path: "/siri-constructions-ui/projects",
+        path: "/projects",
     } as Menu,
     {
-        name: "Employees", path: "/siri-constructions-ui/employees"
+        name: "Employees", path: "/employees"
     } as Menu,
     {
         name: "Admin",
         submenu: [
-            {name: "Login", path: "/siri-constructions-ui/login"}
+            {name: "Login", path: "/login"}
         ] as Menu[],
     } as Menu,
 ];
@@ -25,22 +25,22 @@ const navAdminItems: Menu[] = navItems.slice(0, -1)
     .concat({
         name: "Admin",
         submenu: [
-            {name: "Login", path: "/siri-constructions-ui/login"},
+            {name: "Login", path: "/login"},
             {
                 name: "Services",
-                submenu: [{name: "Edit Service", path: "/siri-constructions-ui/services/edit"}] as Menu[],
+                submenu: [{name: "Edit Service", path: "/services/edit"}] as Menu[],
             } as Menu,
             {
                 name: "Projects",
-                submenu: [{name: "Edit Project", path: "/siri-constructions-ui/projects/edit"}] as Menu[],
+                submenu: [{name: "Edit Project", path: "/projects/edit"}] as Menu[],
             } as Menu,
             {
                 name: "Employees",
-                submenu: [{name: "Edit Employee", path: "/siri-constructions-ui/employees/edit"}] as Menu[],
+                submenu: [{name: "Edit Employee", path: "/employees/edit"}] as Menu[],
             } as Menu,
             {
                 name: "Timesheets",
-                submenu: [{name: "Edit Timesheet", path: "/siri-constructions-ui/timesheets/edit"}] as Menu[],
+                submenu: [{name: "Edit Timesheet", path: "/timesheets/edit"}] as Menu[],
             } as Menu
         ] as Menu[],
     } as Menu)
@@ -124,7 +124,7 @@ export default function Navbar() {
                                     >
                                         {item.submenu.map((sub: Menu, subIdx: number) => (
                                             <li key={subIdx}>
-                                                <Link to={sub.path ?? "/siri-constructions-ui/"}>{sub.name}</Link>
+                                                <Link to={sub.path ?? "/"}>{sub.name}</Link>
                                             </li>
                                         ))}
                                     </ul>
