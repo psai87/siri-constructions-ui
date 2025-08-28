@@ -12,6 +12,7 @@ import ViewEmployeePage from "./modules/employees/ViewEmployeePage.tsx";
 import EditEmployeePage from "./modules/employees/EditEmployeePage.tsx";
 import EditProjectPage from "./modules/projects/EditProjectPage.tsx";
 import ViewProjectPage from "./modules/projects/ViewProjectPage.tsx";
+import EditTimeSheet from "./modules/timesheet/EditTimeSheet.tsx";
 
 // Import other pages as needed
 
@@ -39,6 +40,8 @@ export default function App() {
                            element={<ViewProjectPage alerts={alerts} setAlerts={setAlerts}/>}/>
                     <Route path="/siri-constructions-ui/projects/edit"
                            element={<EditProjectPage alerts={alerts} setAlerts={setAlerts}/>}/>
+                    <Route path="/siri-constructions-ui/timesheets/edit"
+                           element={<EditTimeSheet alerts={alerts} setAlerts={setAlerts}/>}/>
                 </Routes>
                 <ToastBar alerts={alerts} setAlerts={setAlerts}/>
             </div>

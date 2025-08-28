@@ -114,7 +114,7 @@ export default function Navbar() {
                                 <div key={idx} className="dropdown dropdown-hover relative">
                                     <label
                                         tabIndex={idx}
-                                        className="px-4 py-2 text-lg font-semibold rounded-lg cursor-pointer hover:bg-primary hover:text-white transition-all"
+                                        className="px-4 py-2 text-lg font-semibold rounded-lg cursor-pointer hover:bg-gray-200  transition-all"
                                     >
                                         {item.name}
                                     </label>
@@ -133,7 +133,7 @@ export default function Navbar() {
                                 <Link
                                     key={idx}
                                     to={item.path ?? ""}
-                                    className="px-4 py-2 text-lg font-semibold rounded-lg hover:bg-primary hover:text-white transition-all"
+                                    className="px-4 py-2 text-lg font-semibold rounded-lg hover:bg-gray-200  transition-all"
                                 >
                                     {item.name}
                                 </Link>
