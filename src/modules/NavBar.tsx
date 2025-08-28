@@ -8,10 +8,7 @@ const navItems: Menu[] = [
     {name: "Services", path: "/siri-constructions-ui/services"} as Menu,
     {
         name: "Projects",
-        submenu: [
-            {name: "Current Projects", path: "/siri-constructions-ui/projects"},
-            {name: "Previous Projects", path: "/siri-constructions-ui/projects/previous"}
-        ] as Menu[],
+        path: "/siri-constructions-ui/projects",
     } as Menu,
     {
         name: "Employees", path: "/siri-constructions-ui/employees"
