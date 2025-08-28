@@ -148,23 +148,20 @@ export default function EditServicePage({setAlerts}: AlertsProps) {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-white to-blue-100 p-6">
-            <div
-                className="card w-full max-w-5xl bg-base-100 shadow-2xl rounded-2xl p-8 animate-fade-in flex flex-col md:flex-row gap-8">
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4 md:p-8">
+            <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col md:flex-row gap-8">
 
-                {/* Form Fields */}
-                <div className="flex-1 max-w-lg flex flex-col gap-4">
-                    <h1 className="text-3xl font-bold text-blue-700 text-center md:text-left mb-4">
+                {/* Form Fields Section */}
+                <div className="flex-1 flex flex-col gap-6">
+                    <h1 className="text-3xl font-bold text-blue-700 text-center md:text-left mb-2">
                         {selectedService ? "Edit Service" : "Add New Service"}
                     </h1>
 
-                    {/* Select existing service */}
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text font-semibold">Select Existing Service</span>
-                        </label>
+                    {/* Select Existing Service */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Select Existing Service</label>
                         <select
-                            className="select select-bordered w-full"
+                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                             value={selectedService?.id || ""}
                             onChange={(e) => handleSelectService(e.target.value)}
                         >
@@ -177,86 +174,74 @@ export default function EditServicePage({setAlerts}: AlertsProps) {
                         </select>
                     </div>
 
-                    {/* ID */}
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text font-semibold">ID:&nbsp;</span>
-                        </label>
-                        <label className="label">
-                            <span className="label-text">{serviceForm.id}</span>
-                        </label>
+                    {/* ID Field */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">ID</label>
+                        <p className="px-4 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-lg">{serviceForm.id}</p>
                     </div>
 
                     {/* Name */}
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text font-semibold">Name</span>
-                        </label>
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Name</label>
                         <input
                             type="text"
                             name="name"
                             value={serviceForm.name}
                             onChange={handleTextChange}
                             placeholder="Enter name"
-                            className="input input-bordered w-full"
+                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                         />
                     </div>
 
                     {/* Description */}
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text font-semibold">Description</span>
-                        </label>
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
                         <textarea
                             name="description"
                             value={serviceForm.description}
                             onChange={handleTextChange}
                             placeholder="Enter description"
-                            className="textarea textarea-bordered w-full min-h-48"
+                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors min-h-[12rem]"
                         />
                     </div>
 
-                    {/* Buttons */}
-                    <div className="form-control mt-4 flex gap-3">
-                        {selectedService ? (
-                            <>
-                                <button className="btn btn-primary flex-1" disabled={isInvalid} onClick={handleEdit}>
-                                    Edit
-                                </button>
-                                <button className="btn btn-error flex-1" disabled={isInvalid} onClick={handleDelete}>
-                                    Delete
-                                </button>
-                            </>
-                        ) : (
-                            <button className="btn btn-success w-full" disabled={isInvalid} onClick={handleAdd}>
-                                Add
-                            </button>
-                        )}
-                    </div>
-
-                    {/* Upload button */}
-                    <div className="form-control mt-4 w-full">
-                        <label className="label">
-                            <span className="label-text font-semibold">Add Image</span>
-                        </label>
+                    {/* Image Upload */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Add Image</label>
                         <input
                             type="file"
                             accept="image/*"
                             onChange={handleImageChange}
-                            className="file-input file-input-bordered w-full"
+                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors"
                         />
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="mt-4 flex flex-col sm:flex-row gap-4">
+                        {selectedService ? (
+                            <>
+                                <button className="flex-1 py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled={isInvalid} onClick={handleEdit}>
+                                    Edit
+                                </button>
+                                <button className="flex-1 py-3 text-lg font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled={isInvalid} onClick={handleDelete}>
+                                    Delete
+                                </button>
+                            </>
+                        ) : (
+                            <button className="w-full py-3 text-lg font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled={isInvalid} onClick={handleAdd}>
+                                Add
+                            </button>
+                        )}
                     </div>
                 </div>
 
-                {/* Image Preview Card */}
-                <div className="flex-shrink-0 flex items-center justify-center w-100">
-                    <div
-                        className="card w-64 h-64 bg-base-200 shadow-2xl rounded-2xl border-2 border-gray-300 overflow-hidden flex items-center justify-center p-2"
-                    >
-                        <ImagePreview image={imageForm}/>
+                {/* Image Preview Section */}
+                <div className="flex-shrink-0 flex items-center justify-center p-4 md:p-8">
+                    <div className="w-64 h-64 bg-gray-200 rounded-2xl shadow-lg border-2 border-gray-300 overflow-hidden flex items-center justify-center p-2">
+                        <ImagePreview image={imageForm} />
                     </div>
                 </div>
             </div>
         </div>
-    );
+         );
 }

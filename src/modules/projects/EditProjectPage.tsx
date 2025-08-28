@@ -187,23 +187,20 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
     };
 
     return (
-        <div
-            className="flex items-center justify-center min-h-screen bg-gradient-to-br from-white to-blue-100 p-20 w-full">
-            <div
-                className="card w-full max-w-7xl bg-base-100 shadow-2xl rounded-2xl p-8 animate-fade-in flex flex-col md:flex-row gap-8">
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4 md:p-8">
+            <div className="w-full max-w-7xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col md:flex-row gap-8">
 
                 {/* Left Form Fields */}
-                <div className="flex-1 max-w-3xl flex flex-col gap-4 w-full">
-                    <h1 className="text-3xl font-bold text-blue-700 text-center mb-6">
+                <div className="flex-1 flex flex-col gap-6 w-full">
+                    <h1 className="text-3xl font-bold text-blue-700 text-center md:text-left mb-2">
                         {selectedProject ? "Edit Project" : "Add New Project"}
                     </h1>
 
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text font-semibold">Select Existing Service</span>
-                        </label>
+                    {/* Select existing service */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Select Existing Service</label>
                         <select
-                            className="select select-bordered w-full"
+                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                             value={selectedProject?.id || ""}
                             onChange={(e) => handleSelectService(e.target.value)}
                         >
@@ -214,170 +211,154 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
                         </select>
                     </div>
 
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text font-semibold">ID:</span>
-                        </label>
-                        <label className="label">
-                            <span className="label-text">{projectForm.id}</span>
-                        </label>
+                    {/* ID */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">ID</label>
+                        <p className="px-4 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-lg">{projectForm.id}</p>
                     </div>
 
-                    <div className="form-control">
-                        <label className="cursor-pointer label">
-                            <span className="label-text font-semibold">Current</span>
-                            <input
-                                type="checkbox"
-                                name="current"
-                                checked={projectForm.current ?? false}
-                                onChange={handleCheckboxChange}
-                                className="checkbox checkbox-primary ml-2"
-                            />
-                        </label>
+                    {/* Current Checkbox */}
+                    <div className="flex items-center">
+                        <input
+                            type="checkbox"
+                            name="current"
+                            checked={projectForm.current ?? false}
+                            onChange={handleCheckboxChange}
+                            className="h-5 w-5 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500"
+                        />
+                        <label className="ml-2 text-sm font-semibold text-gray-700">Current</label>
                     </div>
 
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text font-semibold">Name</span>
-                        </label>
+                    {/* Name */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Name</label>
                         <input
                             type="text"
                             name="clientName"
                             value={projectForm.clientName}
                             onChange={handleTextChange}
                             placeholder="Enter name"
-                            className="input input-bordered w-full"
+                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                         />
                     </div>
 
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text font-semibold">Description</span>
-                        </label>
+                    {/* Description */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
                         <textarea
                             name="description"
                             value={projectForm.description}
                             onChange={handleTextChange}
                             placeholder="Enter description"
-                            className="textarea textarea-bordered w-full min-h-48"
+                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors min-h-[12rem]"
                         />
                     </div>
 
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text font-semibold">Location</span>
-                        </label>
+                    {/* Location */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Location</label>
                         <input
                             name="location"
                             value={projectForm.location ?? ""}
                             onChange={handleTextChange}
-                            placeholder="Enter description"
-                            className="input input-bordered w-full"
+                            placeholder="Enter location"
+                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                         />
                     </div>
 
                     {/* Image Related Section */}
-                    <div className="bg-gray-100 p-4 rounded-xl shadow-inner flex flex-col gap-4">
-                        <h2 className="text-lg font-semibold text-gray-700 mb-2">Image Details</h2>
+                    <div className="bg-gray-50 p-6 rounded-xl shadow-inner flex flex-col gap-4">
+                        <h2 className="text-xl font-bold text-gray-800">Image Details</h2>
 
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text font-semibold">Image Description</span>
-                            </label>
+                        {/* Image Description */}
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Image Description</label>
                             <textarea
                                 name="description"
                                 value={selectedImageForm.description ?? ""}
                                 onChange={handleAddImageTextChange}
                                 placeholder="Enter description"
-                                className="textarea textarea-bordered w-full min-h-32"
+                                className="w-full px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors min-h-[8rem]"
                             />
                         </div>
 
                         {/* Upload Image */}
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text font-semibold">Browse Image</span>
-                            </label>
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Browse Image</label>
                             <input
                                 type="file"
                                 accept="image/*"
                                 onChange={handleImageChange}
-                                className="file-input file-input-bordered w-full"
+                                className="w-full px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors"
                             />
                         </div>
-                        <div className="form-control mt-4 flex gap-3">
-                            <button
-                                className="btn btn-primary flex-1"
-                                disabled={selectedImageForm.image.trim() == ""}
-                                onClick={handleAddImageButton}
-                            >
-                                Add Image
-                            </button>
-                        </div>
+
+                        {/* Add Image Button */}
+                        <button
+                            className="w-full py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={selectedImageForm.image.trim() === ""}
+                            onClick={handleAddImageButton}
+                        >
+                            Add Image
+                        </button>
                     </div>
 
-
-                    <div className="form-control mt-4 flex gap-3">
+                    {/* Action Buttons */}
+                    <div className="mt-4 flex flex-col sm:flex-row gap-4">
                         {selectedProject ? (
                             <>
-                                <button className="btn btn-primary flex-1" disabled={isInvalid}
-                                        onClick={handleEdit}>Save
+                                <button className="flex-1 py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled={isInvalid} onClick={handleEdit}>
+                                    Save
                                 </button>
-                                <button className="btn btn-error flex-1" disabled={isInvalid}
-                                        onClick={handleDelete}>Delete
+                                <button className="flex-1 py-3 text-lg font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled={isInvalid} onClick={handleDelete}>
+                                    Delete
                                 </button>
                             </>
                         ) : (
-                            <button className="btn btn-success w-full" disabled={isInvalid}
-                                    onClick={handleAdd}>Save</button>
+                            <button className="w-full py-3 text-lg font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled={isInvalid} onClick={handleAdd}>
+                                Save
+                            </button>
                         )}
                     </div>
                 </div>
 
-
                 {/* Right Image Upload & Preview */}
-                <div className="flex-1 max-w-3xl flex flex-col gap-4 w-full ">
-                    {/* Pagination */}
-                    <div className="flex justify-center mt-2">
-                        <div className="join">
-                            <button className="join-item btn" onClick={handlePageLeft}
-                                    disabled={imageForms.length == 0}>«
+                <div className="flex-1 flex flex-col gap-6 w-full p-4 md:p-8 bg-gray-50 rounded-xl shadow-inner border border-gray-200">
+                    {/* Pagination & Delete Image */}
+                    <div className="flex items-center justify-between">
+                        <div className="flex gap-2">
+                            <button className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-200 rounded-l-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed" onClick={handlePageLeft} disabled={imageForms.length === 0}>
+                                «
                             </button>
-                            <button className="join-item btn"
-                                    disabled={imageForms.length == 0}>Pages {imageForms.length == 0 ? pageIndex : pageIndex + 1}/{
-                                imageForms.length
-                            }</button>
-                            <button className="join-item btn" onClick={handlePageRight}
-                                    disabled={imageForms.length == 0}>»
+                            <span className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 border-x border-gray-300">
+                        Pages {imageForms.length === 0 ? 0 : pageIndex + 1}/{imageForms.length}
+                    </span>
+                            <button className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-200 rounded-r-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed" onClick={handlePageRight} disabled={imageForms.length === 0}>
+                                »
                             </button>
                         </div>
-
-                        <button className="btn btn-error btn-circle" disabled={imageForms.length <= 0}
-                                onClick={handleDeleteImageButton}>
+                        <button
+                            className="p-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={imageForms.length <= 0}
+                            onClick={handleDeleteImageButton}
+                        >
                             <TrashIcon className="h-5 w-5"/>
                         </button>
                     </div>
 
-                    <div className="hero bg-base-200 p-4 rounded-2xl shadow-2xl border-2 border-gray-300">
-                        <div className="hero-content flex flex-col items-center gap-4">
-                            {/* Image */}
+                    {/* Image Preview */}
+                    <div className="w-full h-96 flex flex-col items-center justify-center bg-white rounded-lg shadow-md border-2 border-gray-300 p-2">
+                        <ImagePreview image={imageForms.length > 0 ? imageForms[pageIndex] : undefined}/>
+                    </div>
 
-                            <div
-                                className="h-96/12 rounded-2xl overflow-hidden flex items-center justify-center bg-base-100 shadow-inner p-2">
-                                <ImagePreview image={imageForms.length > 0 ? imageForms[pageIndex] : undefined}/>
-                            </div>
-
-                            {/* Description */}
-                            <div className="text-center">
-                                <p className="text-gray-700">
-                                    {imageForms.length > 0 ? imageForms[pageIndex].description : ""}
-                                </p>
-                            </div>
-                        </div>
+                    {/* Description */}
+                    <div className="text-center">
+                        <p className="text-gray-700">
+                            {imageForms.length > 0 ? imageForms[pageIndex].description : ""}
+                        </p>
                     </div>
                 </div>
-
             </div>
         </div>
-    );
+        );
 }

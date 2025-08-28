@@ -1,5 +1,4 @@
 import {AuthState} from "../../model/Constants.ts";
-import type {ChangeEvent} from "react";
 import AuthenticateClient from "../../client/AuthenticateClient.ts";
 import type {AlertsProps} from "../../model/Props.ts";
 
