@@ -40,8 +40,7 @@ const navAdminItems: Menu[] = navItems.slice(0, -1)
             } as Menu,
             {
                 name: "Timesheets",
-                submenu: [{name: "View Timesheet", path: "/siri-constructions-ui/timesheets/view"},
-                    {name: "Edit Timesheet", path: "/siri-constructions-ui/timesheets/edit"}] as Menu[],
+                submenu: [{name: "Edit Timesheet", path: "/siri-constructions-ui/timesheets/edit"}] as Menu[],
             } as Menu
         ] as Menu[],
     } as Menu)
