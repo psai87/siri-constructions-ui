@@ -1,7 +1,7 @@
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen bg-gray-100 text-gray-900 p-4 p-20">
+        <div className="min-h-screen bg-gray-100 text-gray-900 p-12 md:p-12 py-20">
             {/* Hero Section Card */}
             <section className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 md:p-12 max-w-6xl mx-auto my-6 md:my-8">
                 <h1 className="text-4xl sm:text-5xl font-extrabold mb-8 text-blue-600">About Us</h1>
