@@ -19,6 +19,7 @@ const defaultEmployee = (uuid: string): Employee => {
 };
 const defaultImage = (uuid: string, defaultEmployee: Employee): Image => {
     return {
+        name: undefined,
         id: uuid,
         refId: defaultEmployee.id,
         description: null,

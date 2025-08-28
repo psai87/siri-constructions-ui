@@ -16,6 +16,7 @@ const defaultService = (uuid: string): AvailableService => {
 };
 const defaultImage = (uuid: string, defaultService: AvailableService): Image => {
     return {
+        name: undefined,
         id: uuid,
         refId: defaultService.id,
         description: null,

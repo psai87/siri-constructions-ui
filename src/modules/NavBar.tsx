@@ -9,7 +9,7 @@ const navItems: Menu[] = [
     {
         name: "Projects",
         submenu: [
-            {name: "Current Projects", path: "/siri-constructions-ui/projects/current"},
+            {name: "Current Projects", path: "/siri-constructions-ui/projects"},
             {name: "Previous Projects", path: "/siri-constructions-ui/projects/previous"}
         ] as Menu[],
     } as Menu,
@@ -99,11 +99,16 @@ export default function Navbar() {
                     </div>
 
                     {/* Brand */}
-                    <div className="flex-1 flex items-center gap-6 pl-1">
-                        <a className="text-2xl font-extrabold text-primary ">
-                            Siri Constructions
-                        </a>
+                    {/*<div className="flex-1 flex items-center gap-6 pl-1">*/}
+                    {/*    <a className="text-2xl font-extrabold text-primary ">*/}
+                    {/*        Siri Constructions*/}
+                    {/*    </a>*/}
+                    {/*</div>*/}
+
+                    <div className="avatar min-w-60 w-60 h-10">
+                        <img src="/siri-constructions-ui/sirilogo.svg" alt="logo"/>
                     </div>
+
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex gap-4 items-center">
