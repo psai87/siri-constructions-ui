@@ -35,13 +35,13 @@ export default function ViewEmployeePage({setAlerts}: AlertsProps) {
 
     return (
         <div className="p-20">
-            <div className="flex flex-wrap gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-fit">
                 {employees.map((employee: Employee) => (
                     <div
                         key={employee.id}
-                        className="card card-side max-w-96 bg-base-100 shadow-xl border border-gray-200 "
+                        className="card max-w-150 bg-base-100 shadow-xl border border-gray-200"
                     >
-                        <figure className="h-40 w-40">
+                        <figure className="h-40">
                             <ImagePreview image={images.get(employee.id)}/>
                         </figure>
                         <div className="card-body">
