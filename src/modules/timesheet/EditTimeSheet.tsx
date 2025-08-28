@@ -1,52 +1,151 @@
-import { useState } from 'react';
-import { Pencil, Trash2, Check, Plus, Save } from 'lucide-react';
-import type { AlertsProps } from '../../model/Props.ts';
+import {useEffect, useState} from 'react';
+import {Check, Cross, Pencil, Plus, Save, Trash2} from 'lucide-react';
+import type {AlertsProps} from '../../model/Props.ts';
 import {DateInput} from "@mantine/dates";
+import type {Employee} from "../../model/Employee.ts";
+import {employeeClient} from "../../client/EmployeeClient.ts";
+import {timeSheetClient} from "../../client/TimeSheetClient.ts";
+import type {TimeSheet} from "../../model/TimeSheet.ts";
+import {type RowDetail, RowState} from "../../model/Constants.ts";
 
-export default function EditTimeSheet({ setAlerts }: AlertsProps) {
-    const [data, setData] = useState([
-        { id: 1, name: 'Cypher', job: 'Data Analyst', location: 'Sector 7', startDate: '2023-01-15', endDate: '2024-03-20', employee: 'Alice Johnson', isEditing: false },
-        { id: 2, name: 'Replicant', job: 'System Engineer', location: 'Nexus-6', startDate: '2022-06-01', endDate: '2024-05-10', employee: 'Bob Smith', isEditing: false },
-        { id: 3, name: 'Neon', job: 'Security Protocol', location: 'Deep Web', startDate: '2023-09-01', endDate: '2024-12-31', employee: 'Charlie Brown', isEditing: false },
-        { id: 4, name: 'Synapse', job: 'Network Architect', location: 'The Grid', startDate: '2021-02-20', endDate: '2025-01-30', employee: 'Diana Ross', isEditing: false },
-        { id: 5, name: 'Unit 734', job: 'Automated Response', location: 'Server Farm', startDate: '2024-01-01', endDate: '2024-06-01', employee: 'Alice Johnson', isEditing: false },
-    ]);
+export default function EditTimeSheet({setAlerts}: AlertsProps) {
+    const [employees, setEmployees] = useState<Employee[]>([]);
+    const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+    const [startDate, setStartDate] = useState<string | undefined | null>();
+    const [endDate, setEndDate] = useState<string | undefined | null>();
+    const [timeSheets, setTimeSheets] = useState<TimeSheet[]>([]);
+    const [rowTimesheet, setRowTimesheet] = useState<Map<string, RowDetail>>(new Map<string, RowDetail>())
+    const [tempRowTimesheets, setTempRowTimesheets] = useState<Map<string, TimeSheet>>(new Map<string, TimeSheet>())
 
-    const [employees] = useState(['Alice Johnson', 'Bob Smith', 'Charlie Brown', 'Diana Ross', 'Eve Adams']);
 
-    const handleInputChange = (e, index, field) => {
-        const newData = [...data];
-        newData[index][field] = e.target.value;
-        setData(newData);
+    useEffect(() => {
+        employeeClient.getEmployees()
+            .then(response => {
+                setEmployees(response);
+                console.log("Employee loaded");
+            })
+            .catch(error => {
+                console.log(error)
+                showAlert("error", error.message)
+            })
+    }, []);
+
+    const showAlert = (type: "success" | "error", message: string) => {
+        const id = Date.now();
+        setAlerts((prev) => [...prev, {id, type, message}]);
     };
+
+    const handleSelectService = (selectedValue: string) => {
+        if (!selectedValue || !selectedValue.trim()) {
+            return;
+        }
+        const selectedEmployee: Employee | undefined = employees.find((employee: Employee) => employee.id === selectedValue);
+        if (selectedEmployee) {
+            setSelectedEmployee(selectedEmployee);
+        }
+    };
+
+    const handleInputChange = (
+        id: string,
+        field: string,
+        value: string
+    ): void => {
+        setTimeSheets((prev) =>
+            prev.map((row: TimeSheet) =>
+                row.id === id ? {...row, [field]: value} : row
+            ));
+    }
 
     const handleAddRow = () => {
-        const newId = data.length > 0 ? Math.max(...data.map(row => row.id)) + 1 : 1;
-        const newRow = { id: newId, name: '', job: '', location: '', startDate: '', endDate: '', employee: employees[0], isEditing: true };
-        setData([...data, newRow]);
+        const newTimesheet: TimeSheet = {
+            id: crypto.randomUUID(),
+            employeeId: "",
+            date: "",
+            hours: 0
+        };
+        const newRowDetail: RowDetail = {
+            editable: false,
+            state: RowState.Added
+        }
+        setTimeSheets(prev => [...prev, newTimesheet]);
+        setRowTimesheet(prevMap => new Map(prevMap).set(newTimesheet.id, newRowDetail));
     };
 
-    const handleDeleteRow = (index) => setData(data.filter((_, i) => i !== index));
-
-    const handleEditRow = (index) => {
-        const newData = [...data];
-        newData[index].isEditing = true;
-        setData(newData);
+    const handleDeleteRow = (id: string): void => {
+        setRowTimesheet(prevMap => {
+            const newMap = new Map(prevMap);
+            if (newMap.get(id)?.state == RowState.Added) {
+                newMap.delete(id)
+            } else {
+                newMap.set(id, {...newMap.get(id) as RowDetail, state: RowState.Deleted});
+            }
+            return newMap;
+        })
+        setTimeSheets(prevMap => prevMap.filter(timesheet => timesheet.id !== id))
+        setTempRowTimesheets(prevMap => {
+            const newMap = new Map(prevMap);
+            newMap.delete(id)
+            return newMap;
+        })
     };
 
-    const handleConfirmEdit = (index) => {
-        const newData = [...data];
-        newData[index].isEditing = false;
-        setData(newData);
+    const handleEditRow = (id: string): void => {
+        setRowTimesheet(prevMap =>
+            new Map(prevMap).set(id, {...prevMap.get(id)!, editable: true}));
+        setTempRowTimesheets(prevMap =>
+            new Map(prevMap).set(id, timeSheets.find(data => data.id === id) as TimeSheet));
     };
+
+    const handleConfirmEdit = (id: string): void => {
+        setRowTimesheet(prevMap => {
+            const prevDetail: RowDetail = prevMap.get(id) as RowDetail;
+            return new Map(prevMap).set(id, {
+                ...prevDetail,
+                editable: false,
+                state: prevDetail?.state === RowState.Added ? RowState.Added : RowState.Edited,
+            });
+        });
+        setTempRowTimesheets(prevMap => {
+            const newMap = new Map(prevMap);
+            newMap.delete(id)
+            return newMap;
+        })
+    };
+
+    const handleCancel = (id: string): void => {
+        setRowTimesheet(prevMap =>
+            new Map(prevMap).set(id, {...prevMap.get(id) as RowDetail, editable: false}));
+        setTimeSheets(prevMap => prevMap.filter(timesheet => timesheet.id !== id)
+            .concat(tempRowTimesheets.get(id) as TimeSheet));
+        setTempRowTimesheets(prevMap => {
+            const newMap = new Map(prevMap);
+            newMap.delete(id)
+            return newMap;
+        })
+    };
+
+    const handleSearch = () => {
+        timeSheetClient
+            .getTimesheets(selectedEmployee!.id, startDate!, endDate!)
+            .then(response => {
+                setTimeSheets(response)
+                console.log("timesheet loaded successfully")
+            })
+            .catch(error => {
+                console.error(error)
+                showAlert("error", error.message)
+            })
+    }
 
     const handleSave = () => {
-        console.log('Saving data:', data); // ✅ Console only (no alert)
+        console.log('Saving data:'); // ✅ Console only (no alert)
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen p-6 bg-gradient-to-br from-gray-100 via-gray-50 to-white">
-            <div className="overflow-x-auto bg-white/90 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-gray-200 w-full max-w-6xl">
+        <div
+            className="flex justify-center items-center min-h-screen p-6 bg-gradient-to-br from-gray-100 via-gray-50 to-white">
+            <div
+                className="overflow-x-auto bg-white/90 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-gray-200 w-full max-w-6xl">
 
                 {/* Title */}
                 <h2 className="text-4xl font-extrabold text-left text-gray-800 drop-shadow mb-10 tracking-tight">
@@ -62,26 +161,26 @@ export default function EditTimeSheet({ setAlerts }: AlertsProps) {
                             <select
                                 className="px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                                 value={""}
-                                // onChange={(e) => handleSelectService(e.target.value)}
+                                onChange={(e) => handleSelectService(e.target.value)}
                             >
                                 <option value="">-- None selected --</option>
-                                {/*{employees.map((emp) => (*/}
-                                {/* <option key={emp.id} value={emp.id}>*/}
-                                {/* {emp.firstName} {emp.lastName}*/}
-                                {/* </option>*/}
-                                {/*))}*/}
+                                {employees.map((emp) => (
+                                    <option key={emp.id} value={emp.id}>
+                                        {emp.firstName} {emp.lastName}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                         <DateInput
-                            // value={employeeForm.dob}
-                            // onChange={handleDateChange}
+                            value={startDate}
+                            onChange={(val) => setStartDate(val)}
                             placeholder="Pick month and year"
                             label="Select Month & Year"
                             valueFormat="YYYY/MM/DD"
                         />
                         <DateInput
-                            // value={employeeForm.dob}
-                            // onChange={handleDateChange}
+                            value={endDate}
+                            onChange={(val) => setEndDate(val)}
                             placeholder="Pick month and year"
                             label="Select Month & Year"
                             valueFormat="YYYY/MM/DD"
@@ -91,15 +190,24 @@ export default function EditTimeSheet({ setAlerts }: AlertsProps) {
                     <div className="flex gap-3">
                         <button
                             className="flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold shadow-lg transition-all duration-300"
-                            onClick={handleAddRow}
+                            onClick={handleSearch}
+                            disabled={!selectedEmployee || !startDate || !endDate}
                         >
-                            <Plus size={18} /> Add Row
+                            <Plus size={18}/> Search
+                        </button>
+                        <button
+                            className="flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold shadow-lg transition-all duration-300"
+                            onClick={handleAddRow}
+                            disabled={!selectedEmployee || !startDate || !endDate}
+                        >
+                            <Plus size={18}/> Add Row
                         </button>
                         <button
                             className="flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold shadow-lg transition-all duration-300"
                             onClick={handleSave}
+                            disabled={!selectedEmployee || !startDate || !endDate}
                         >
-                            <Save size={18} /> Save
+                            <Save size={18}/> Save
                         </button>
                     </div>
                 </div>
@@ -110,26 +218,27 @@ export default function EditTimeSheet({ setAlerts }: AlertsProps) {
                     <tr className="bg-gray-200/80 rounded-lg">
                         <th className="p-4 text-left font-semibold">Date</th>
                         <th className="p-4 text-left font-semibold">Employee</th>
-
                         <th className="p-4 text-left font-semibold">Daily Hours</th>
                         <th className="p-4 text-center font-semibold">Actions</th>
                     </tr>
                     </thead>
 
                     <tbody>
-                    {data.map((row, index) => (
+                    {timeSheets.map((row) => (
                         <tr
                             key={row.id}
                             className="shadow-md bg-white hover:shadow-xl hover:scale-[1.01] transition-all rounded-lg"
                         >
                             <td className="p-4">
-                                <input
-                                    type="date"
-                                    value={row.endDate}
-                                    onChange={(e) => handleInputChange(e, index, 'endDate')}
-                                    readOnly={!row.isEditing}
+                                <DateInput
+                                    readOnly={!rowTimesheet.get(row.id)?.editable}
+                                    value={row.date}
+                                    // onChange={(val) =>}
+                                    placeholder="Pick month and year"
+                                    label="Select Month & Year"
+                                    valueFormat="YYYY/MM/DD"
                                     className={`w-full px-2 py-1 bg-transparent border-b outline-none ${
-                                        row.isEditing
+                                        rowTimesheet.get(row.id)?.editable
                                             ? 'border-blue-400 focus:ring-0'
                                             : 'border-transparent text-gray-700'
                                     }`}
@@ -138,50 +247,54 @@ export default function EditTimeSheet({ setAlerts }: AlertsProps) {
                             <td className="p-4">
                                 <input
                                     type="text"
-                                    value={row.employee}
-                                    disabled={!row.isEditing}
-                                    onChange={(e) => handleInputChange(e, index, 'employee')}
-                                    className={`w-full px-2 py-1 bg-transparent border-b outline-none ${
-                                        row.isEditing
-                                            ? 'border-blue-400 focus:ring-0'
-                                            : 'border-transparent text-gray-700'
-                                    }`}
+                                    value={row.employeeId}
+                                    disabled={true}
+                                    className={`w-full px-2 py-1 bg-transparent border-b outline-none ${'border-blue-400 focus:ring-0'}`}
                                 />
                             </td>
                             <td className="p-4">
                                 <input
                                     type="text"
-                                    value={row.endDate}
-                                    disabled={!row.isEditing}
-                                    onChange={(e) => handleInputChange(e, index, 'employee')}
+                                    value={row.hours}
+                                    disabled={!rowTimesheet.get(row.id)?.editable}
+                                    onChange={(e) => handleInputChange(row.id, 'hours', e.target.value)}
                                     className={`w-full px-2 py-1 bg-transparent border-b outline-none ${
-                                        row.isEditing
+                                        !rowTimesheet.get(row.id)?.editable
                                             ? 'border-blue-400 focus:ring-0'
                                             : 'border-transparent text-gray-700'
                                     }`}
                                 />
                             </td>
                             <td className="p-4 flex justify-center gap-2">
-                                {row.isEditing ? (
+                                {!rowTimesheet.get(row.id)?.editable ? (
                                     <button
-                                        onClick={() => handleConfirmEdit(index)}
+                                        onClick={() => handleConfirmEdit(row.id)}
                                         className="p-2 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-md transition"
                                     >
-                                        <Check size={16} />
+                                        <Check size={16}/>
                                     </button>
                                 ) : (
-                                    <button
-                                        onClick={() => handleEditRow(index)}
-                                        className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white shadow-md transition"
-                                    >
-                                        <Pencil size={16} />
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => handleEditRow(row.id)}
+                                            className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white shadow-md transition"
+                                        >
+                                            <Pencil size={16}/>
+                                        </button>
+                                        <button
+                                            onClick={() => handleCancel(row.id)}
+                                            className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white shadow-md transition"
+                                        >
+                                            <Cross size={16}/>
+                                        </button>
+                                    </div>
+
                                 )}
                                 <button
-                                    onClick={() => handleDeleteRow(index)}
+                                    onClick={() => handleDeleteRow(row.id)}
                                     className="p-2 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md transition"
                                 >
-                                    <Trash2 size={16} />
+                                    <Trash2 size={16}/>
                                 </button>
                             </td>
                         </tr>
