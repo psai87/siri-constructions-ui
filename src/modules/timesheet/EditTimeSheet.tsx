@@ -36,12 +36,14 @@ export default function EditTimeSheet({setAlerts}: AlertsProps) {
     };
 
     const handleSelectService = (selectedValue: string) => {
-        if (!selectedValue || !selectedValue.trim()) {
-            return;
-        }
-        const selectedEmployee: Employee | undefined = employees.find((employee: Employee) => employee.id === selectedValue);
-        if (selectedEmployee) {
-            setSelectedEmployee(selectedEmployee);
+        setTimeSheets([])
+        setSelectedEmployee(null)
+        setRowTimesheet(new Map());
+        if (selectedValue && selectedValue.trim()) {
+            const selectedEmployee: Employee | undefined = employees.find((employee: Employee) => employee.id === selectedValue);
+            if (selectedEmployee) {
+                setSelectedEmployee(selectedEmployee);
+            }
         }
     };
 
@@ -54,6 +56,7 @@ export default function EditTimeSheet({setAlerts}: AlertsProps) {
             console.warn("val cannot be null")
             return;
         }
+        console.log(field, id, value);
         setTimeSheets((prev) =>
             prev.map((row: TimeSheet) =>
                 row.id === id ? {...row, [field]: value} : row
@@ -63,7 +66,7 @@ export default function EditTimeSheet({setAlerts}: AlertsProps) {
     const handleAddRow = () => {
         const newTimesheet: TimeSheet = {
             id: crypto.randomUUID(),
-            employeeId: "",
+            employeeId: selectedEmployee!.id,
             date: "",
             hours: 0
         };
@@ -132,11 +135,13 @@ export default function EditTimeSheet({setAlerts}: AlertsProps) {
         timeSheetClient
             .getTimesheets(selectedEmployee!.id, startDate!, endDate!)
             .then(response => {
-                setTimeSheets(response)
-                setRowTimesheet(new Map(response.map(data => [data.id as string, {
-                    editable: false,
-                    state: RowState.Original
-                } as RowDetail])))
+                if (response) {
+                    setTimeSheets(response)
+                    setRowTimesheet(new Map(response.map(data => [data.id as string, {
+                        editable: false,
+                        state: RowState.Original
+                    } as RowDetail])))
+                }
                 console.log("timesheet loaded successfully")
             })
             .catch(error => {
@@ -149,8 +154,40 @@ export default function EditTimeSheet({setAlerts}: AlertsProps) {
         return timeSheets.find(data => data.date.trim() == "") != undefined;
     }
 
-    const handleSave = () => {
-        console.log('Saving data:'); // ✅ Console only (no alert)
+    const handleSave = async () => {
+        console.log("Saving data");
+        if (new Set(timeSheets.map(data => data.date)).size < timeSheets.length) {
+            showAlert("error", "timesheets cannot have same date")
+            return;
+        }
+        const added: TimeSheet[] = timeSheets.filter(data => RowState.Added === rowTimesheet.get(data.id)?.state)
+        const updated: TimeSheet[] = timeSheets.filter(data => RowState.Edited === rowTimesheet.get(data.id)?.state)
+        const deleted: string[] = [...rowTimesheet.entries()]
+            .filter(([, item]) => RowState.Deleted === item.state)
+            .map(([key,]) => key)
+        const promiseArray: Promise<void>[] = []
+        if (added?.length > 0) {
+            console.log("added timesheets [size=" + added.length + "]");
+            promiseArray.push(timeSheetClient.createTimesheets(added));
+        }
+        if (updated?.length > 0) {
+            console.log("updates timesheets [size=" + updated.length + "]")
+            promiseArray.push(timeSheetClient.updateTimesheets(updated));
+        }
+        if (deleted?.length > 0) {
+            console.log("deleted timesheets [size=" + deleted.length + "]");
+            promiseArray.push(timeSheetClient.deleteTimesheets(deleted));
+        }
+        try {
+            await Promise.all(promiseArray);
+            showAlert("success", "Successfully save data");
+            const timesheets = await timeSheetClient.getTimesheets(selectedEmployee!.id, startDate!, endDate!)
+            setTimeSheets(timesheets);
+        } catch (error) {
+            console.error(error)
+            showAlert("error", "Failed to save data");
+        }
+
     };
 
     return (
@@ -189,7 +226,7 @@ export default function EditTimeSheet({setAlerts}: AlertsProps) {
                             placeholder="Pick month and year"
                             label="Select Start Date"
                             valueFormat="YYYY/MM/DD"
-                        />
+                       />
                         <DateInput
                             value={endDate}
                             onChange={(val) => setEndDate(val)}
@@ -251,6 +288,7 @@ export default function EditTimeSheet({setAlerts}: AlertsProps) {
                                     onChange={(val) => handleInputChange(row.id, "date", val)}
                                     placeholder="YYYY/MM/DD"
                                     valueFormat="YYYY/MM/DD"
+                                    excludeDate={(date) => (date > (endDate ? endDate : date)) || (date < (startDate ? startDate : date))}
                                     styles={{
                                         input: {
                                             border: 'none', // remove default border

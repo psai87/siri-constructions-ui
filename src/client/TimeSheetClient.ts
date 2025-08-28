@@ -2,16 +2,16 @@ import {AuthState, host} from "../model/Constants.ts";
 import type {TimeSheet} from "../model/TimeSheet.ts";
 
 class TimeSheetClient {
-    timesheetUrl: string = host + "/siricons/employee/timesheets";
+    timesheetUrl: string = host + "/siricons/employee_timesheets";
 
     async getTimesheets(employeeId: string, startDate: string, endDate: string): Promise<TimeSheet[]> {
         const urlParams = new URLSearchParams();
         urlParams.append("employee_id", employeeId);
-        urlParams.append("start_Date", startDate);
+        urlParams.append("start_date", startDate);
         urlParams.append("end_date", endDate);
         const requestOptions: RequestInit = {
             method: 'GET',
-            headers: {'Content-Type': 'application/json'}
+            headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${AuthState.token}`}
         };
         const response: Response = await fetch(`${this.timesheetUrl}?${urlParams.toString()}`, requestOptions);
         if (!response.ok) {
