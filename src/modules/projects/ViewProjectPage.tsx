@@ -60,7 +60,7 @@ export default function ViewProjectPage({setAlerts}: AlertsProps) {
     }
 
     return (
-        <div className="bg-gray-100 text-gray-900 min-h-screen px-10 py-20 flex flex-col md:flex-row gap-6 md:gap-12 items-start">
+        <div className="bg-gray-100 text-gray-900 min-h-screen px-10 py-25 flex flex-col md:flex-row gap-6 md:gap-12 items-start">
             {/* LEFT LIST - CORRECTED ALIGNMENT */}
             <div className="md:w-1/3 w-full max-w-sm md:max-w-none md:p-6 p-4 rounded-lg bg-white shadow-lg overflow-y-auto h-[90vh]">
                 <h2 className="text-2xl font-bold mb-6 text-blue-600">Projects</h2>
