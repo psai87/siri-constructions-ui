@@ -1,7 +1,7 @@
 
 export default function ContactPage() {
     return (
-        <div className="min-h-screen bg-gray-100 text-gray-900 p-4 md:p-12">
+        <div className="min-h-screen bg-gray-100 text-gray-900 p-10">
             <section className="max-w-7xl mx-auto py-8 md:py-16">
                 <h1 className="text-4xl sm:text-5xl font-extrabold mb-8 md:mb-12 text-center text-blue-600">Contact Us</h1>
 

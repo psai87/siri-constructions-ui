@@ -62,11 +62,20 @@ function renderMenuItems(items: Menu[]): JSX.Element[] {
             </li>
         ) : (
             <li key={idx}>
-                <Link to={item.path ?? ""}>{item.name}</Link>
+                <Link to={item.path ?? ""} onClick={handleLinkClick}>{item.name}</Link>
             </li>
         )
     );
 }
+
+// Function to handle link clicks and close the drawer
+const handleLinkClick = () => {
+    // Find the checkbox element by its ID and uncheck it
+    const drawerCheckbox = document.getElementById('my-drawer-3') as HTMLInputElement;
+    if (drawerCheckbox) {
+        drawerCheckbox.checked = false;
+    }
+};
 
 
 export default function Navbar() {
@@ -75,7 +84,6 @@ export default function Navbar() {
             <input id="my-drawer-3" type="checkbox" className="drawer-toggle"/>
             <div className="drawer-content flex flex-col">
 
-                /* Nav bar*/
                 <div
                     className="navbar bg-base-100 border-b border-gray-200 shadow-xl fixed top-0 w-full z-50 px-4 md:px-8 py-4"
                     data-theme="light">
@@ -97,13 +105,6 @@ export default function Navbar() {
                             </svg>
                         </label>
                     </div>
-
-                    {/* Brand */}
-                    {/*<div className="flex-1 flex items-center gap-6 pl-1">*/}
-                    {/*    <a className="text-2xl font-extrabold text-primary ">*/}
-                    {/*        Siri Constructions*/}
-                    {/*    </a>*/}
-                    {/*</div>*/}
 
                     <div className="avatar min-w-60 w-60 h-10">
                         <img src="/siri-constructions-ui/sirilogo.svg" alt="logo"/>

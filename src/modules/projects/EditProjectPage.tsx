@@ -187,7 +187,7 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4 md:p-8">
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 p-28">
             <div className="w-full max-w-7xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col md:flex-row gap-8">
 
                 {/* Left Form Fields */}
