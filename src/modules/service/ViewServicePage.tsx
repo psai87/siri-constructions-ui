@@ -34,18 +34,18 @@ export default function ViewServicePage({setAlerts}: AlertsProps) {
 
     return (
         <div className="p-20">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl">
                 {services.map((service) => (
                     <div
                         key={service.id}
-                        className="card max-w-150 bg-base-100 shadow-xl border border-gray-200"
+                        className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden transform transition duration-300 hover:scale-105"
                     >
-                        <figure className="h-48 min-w-48">
+                        <figure className="w-full h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
                             <ImagePreview image={images.get(service.id)}/>
                         </figure>
-                        <div className="card-body min-w-48">
-                            <h3 className="card-title">{service.name}</h3>
-                            <p>{service.description}</p>
+                        <div className="p-4 md:p-6 text-center">
+                            <h3 className="text-xl font-semibold text-gray-800">{service.name}</h3>
+                            <p className="mt-1 text-sm text-gray-600">{service.description}</p>
                         </div>
                     </div>
                 ))}

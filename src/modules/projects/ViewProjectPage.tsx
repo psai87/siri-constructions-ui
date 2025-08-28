@@ -60,57 +60,56 @@ export default function ViewProjectPage({setAlerts}: AlertsProps) {
     }
 
     return (
-        <div className="flex flex-col md:flex-row h-screen p-4 md:p-20 gap-4">
-            {/* LEFT LIST */}
-            <div className="md:w-1/4 w-full overflow-y-auto p-2 md:p-4">
-                <h2 className="text-xl font-bold mb-4 text-primary">Projects</h2>
-                <ul className="space-y-3">
+        <div className="bg-gray-100 text-gray-900 min-h-screen p-20 md:p-20 flex flex-col md:flex-row gap-6 md:gap-12 items-start">
+            {/* LEFT LIST - CORRECTED ALIGNMENT */}
+            <div className="md:w-1/3 w-full max-w-sm md:max-w-none md:p-6 p-4 rounded-lg bg-white shadow-lg overflow-y-auto h-[90vh]">
+                <h2 className="text-2xl font-bold mb-6 text-blue-600">Projects</h2>
+                <ul className="space-y-4">
                     {projects.map((project) => (
                         <li
                             key={project.id}
-                            className={`card shadow-sm cursor-pointer transition ${
-                                selectedProject?.id === project.id ? "border-2 border-blue-500" : ""
-                            }`}
+                            className={`
+                        p-5 rounded-lg border-2 transition-all duration-200 ease-in-out cursor-pointer
+                        hover:bg-gray-50 hover:transform hover:-translate-y-1 hover:shadow-md
+                        ${selectedProject?.id === project.id ? "bg-blue-50 border-blue-500 shadow-md scale-105" : "bg-white border-transparent"}
+                    `}
                             onClick={() => handleOnProjectClick(project)}
                         >
-                            <div className="card-body p-4">
-                                <h3 className="font-semibold text-blue-700">{project.clientName}</h3>
-                                <p className="text-gray-700 line-clamp-2">{project.description}</p>
-                            </div>
+                            <h3 className="text-lg font-semibold text-blue-700 mb-1">{project.clientName}</h3>
+                            <p className="text-gray-600 text-sm line-clamp-2">{project.description}</p>
                         </li>
                     ))}
                 </ul>
             </div>
 
-            {/* RIGHT DETAIL VIEW */}
-            <div className="flex-1 w-full p-2 md:p-6">
+            {/* RIGHT DETAIL VIEW - CORRECTED ALIGNMENT */}
+            <div className="flex-1 w-full p-4 md:p-6 rounded-lg bg-white shadow-xl h-[90vh]">
                 {selectedProject ? (
-                    <div className="card bg-base-100 shadow-lg p-6">
-                        <h2 className="text-2xl font-bold text-blue-700">{selectedProject.clientName}</h2>
-                        <p className="mt-2 text-gray-700">{selectedProject.description}</p>
+                    <div className="w-full h-full p-8 rounded-lg flex flex-col">
+                        <h2 className="text-3xl font-extrabold text-blue-700 mb-2">{selectedProject.clientName}</h2>
+                        <p className="text-gray-600 text-lg mb-6">{selectedProject.description}</p>
 
-                        <div className="grid grid-cols-2 gap-4 mt-4">
-                            <ImagePreview image={images.get(selectedProject?.id)?.[pageIndex]} />
+                        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="w-full flex justify-center items-center">
+                                <ImagePreview image={images.get(selectedProject?.id)?.[pageIndex]} />
+                            </div>
+                            <p className="text-gray-600 text-lg mb-6">{images.get(selectedProject?.id)?.[pageIndex]?.description}</p>
                         </div>
 
-                        <div className="flex justify-center mt-2">
-                            <div className="join">
+                        <div className="mt-8 flex justify-center">
+                            <div className="inline-flex rounded-md shadow-sm" role="group">
                                 <button
-                                    className="join-item btn"
+                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-l-lg hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                                     onClick={handlePageLeft}
                                     disabled={images.get(selectedProject.id)?.length === 0}
                                 >
                                     «
                                 </button>
+                                <span className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-200 border-x border-gray-300">
+                            Page {images.get(selectedProject.id)?.length === 0 ? 0 : pageIndex + 1} / {images.get(selectedProject.id)?.length ?? 0}
+                        </span>
                                 <button
-                                    className="join-item btn"
-                                    disabled={images.get(selectedProject.id)?.length === 0}
-                                >
-                                    Page {images.get(selectedProject.id)?.length === 0 ? 0 : pageIndex + 1}/
-                                    {images.get(selectedProject.id)?.length ?? 0}
-                                </button>
-                                <button
-                                    className="join-item btn"
+                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-r-lg hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                                     onClick={handlePageRight}
                                     disabled={images.get(selectedProject.id)?.length === 0}
                                 >
@@ -120,12 +119,16 @@ export default function ViewProjectPage({setAlerts}: AlertsProps) {
                         </div>
                     </div>
                 ) : (
-                    <div className="flex items-center justify-center h-full text-gray-400">
-                        Select a project to view details
+                    <div className="w-full h-full flex items-center justify-center">
+                        <div className="text-center text-gray-400 font-medium text-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 mx-auto mb-2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+                            </svg>
+                            Select a project to view details
+                        </div>
                     </div>
                 )}
             </div>
         </div>
-
-    );
+         );
 }
