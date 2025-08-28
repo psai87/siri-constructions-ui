@@ -11,6 +11,7 @@ import ViewServicePage from "./modules/service/ViewServicePage.tsx";
 import ViewEmployeePage from "./modules/employees/ViewEmployeePage.tsx";
 import EditEmployeePage from "./modules/employees/EditEmployeePage.tsx";
 import EditProjectPage from "./modules/projects/EditProjectPage.tsx";
+import ViewProjectPage from "./modules/projects/ViewProjectPage.tsx";
 
 // Import other pages as needed
 
@@ -34,8 +35,8 @@ export default function App() {
                            element={<ViewEmployeePage alerts={alerts} setAlerts={setAlerts}/>}/>
                     <Route path="/siri-constructions-ui/employees/edit"
                            element={<EditEmployeePage alerts={alerts} setAlerts={setAlerts}/>}/>
-                    {/*<Route path="/siri-constructions-ui/projects"*/}
-                    {/*       element={<ViewProjectPage alerts={alerts} setAlerts={setAlerts}/>}/>*/}
+                    <Route path="/siri-constructions-ui/projects"
+                           element={<ViewProjectPage alerts={alerts} setAlerts={setAlerts}/>}/>
                     <Route path="/siri-constructions-ui/projects/edit"
                            element={<EditProjectPage alerts={alerts} setAlerts={setAlerts}/>}/>
                 </Routes>
