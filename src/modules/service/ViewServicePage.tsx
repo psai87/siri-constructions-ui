@@ -33,7 +33,7 @@ export default function ViewServicePage({setAlerts}: AlertsProps) {
     };
 
     return (
-        <div className="p-12 md:p-12 py-20">
+        <div className="px-10 py-20">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl">
                 {services.map((service) => (
                     <div
