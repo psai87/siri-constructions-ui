@@ -198,7 +198,7 @@ export default function Navbar({setAlerts}: AlertsProps) {
                     </div>
                 </div>
 
-                <div className="drawer-side pt-19">
+                <div className="drawer-side pt-19 z-15">
                     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul
                         tabIndex={0}
@@ -208,7 +208,8 @@ export default function Navbar({setAlerts}: AlertsProps) {
                     </ul>
                 </div>
             </div>
-            // ... inside the Navbar component, but outside the main `div`
+
+
             <dialog id="login_modal" className="modal">
                 <div className="modal-box">
                     <form method="dialog">

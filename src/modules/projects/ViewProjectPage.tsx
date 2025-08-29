@@ -1,4 +1,3 @@
-import * as React from "react";
 import {useEffect, useState} from "react";
 import type {Image} from "../../model/Image.ts";
 import type {Project} from "../../model/Project.ts";
@@ -13,6 +12,7 @@ export default function ViewProjectPage({setAlerts}: AlertsProps) {
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [images, setImages] = useState<Map<string, Image[]>>(new Map());
     const [pageIndex, setPageIndex] = useState<number>(0);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     useEffect(() => {
         projectClient.getProjects()
@@ -62,141 +62,177 @@ export default function ViewProjectPage({setAlerts}: AlertsProps) {
         });
     }
 
-    const handleAllClicked = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.currentTarget.blur();
+    const handleAllClicked = () => {
+       setIsDropdownOpen(false);
         setProjectsFilter(projects);
     }
 
-    const handleCurrentClicked = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.currentTarget.blur();
+    const handleCurrentClicked = () => {
+        setIsDropdownOpen(false);
         setProjectsFilter(projects.filter(data => data.current));
     }
 
-    const handleCompletedClicked = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.currentTarget.blur();
+    const handleCompletedClicked = () => {
+        setIsDropdownOpen(false);
         setProjectsFilter(projects.filter(data => !data.current));
     }
 
     return (
-        <div className="bg-gray-50 text-gray-900 min-h-screen px-10 py-25">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[90vh]">
-                {/* LEFT LIST - CORRECTED ALIGNMENT */}
-                <div
-                    className="bg-white rounded-2xl shadow-lg p-6 flex flex-col overflow-y-auto">
-                    <div className="dropdown mb-6">
-                        <label tabIndex={0}
-                               className="btn btn-ghost text-2xl font-bold text-blue-600 flex justify-between w-48">
-                            Projects
-                            <svg
-                                className="w-5 h-5 ml-2"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </label>
+        <div className="antialiased font-inter bg-gray-50 min-h-screen">
+            <style>
+                {`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@500;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F4F6F8;
+            color: #1a202c;
+        }
+        h1, h2, h3, h4, .font-oswald {
+            font-family: 'Oswald', sans-serif;
+        }
+        `}
+            </style>
 
-                        <ul
-                            tabIndex={0}
-                            className="dropdown-content menu p-2 shadow bg-white rounded-box w-48 mt-1"
-                        >
-                            <li>
-                                <button onClick={handleAllClicked}>All</button>
-                            </li>
-                            <li>
-                                <button onClick={handleCurrentClicked}>Current</button>
-                            </li>
-                            <li>
-                                <button onClick={handleCompletedClicked}>Completed</button>
-                            </li>
+            <main className="container mx-auto px-6 py-12 md:py-20">
+                <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center text-gray-800">
+                    Our Projects
+                </h1>
+                <p className="text-lg md:text-xl text-center text-gray-700 max-w-3xl mx-auto mb-12">
+                    Explore our portfolio of successful projects across various sectors,
+                    showcasing our expertise in MEP and structural engineering.
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Project List Column */}
+                    <div
+                        className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 flex flex-col overflow-y-auto max-h-[80vh]">
+                        <div className="relative mb-6">
+                            <button
+                                className="w-full text-left text-2xl font-bold text-gray-800 px-4 py-2 flex justify-between items-center rounded-lg bg-gray-100 border border-gray-200"
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            >
+                                Projects
+                                <svg
+                                    className={`w-5 h-5 ml-2 transform transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                          d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            {isDropdownOpen && (
+                                <ul className="absolute z-10 w-full mt-1 bg-white shadow-lg rounded-lg border border-gray-200 overflow-hidden">
+                                    <li>
+                                        <button onClick={handleAllClicked}
+                                                className="w-full text-left px-4 py-2 hover:bg-gray-100">All
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button onClick={handleCurrentClicked}
+                                                className="w-full text-left px-4 py-2 hover:bg-gray-100">Current
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button onClick={handleCompletedClicked}
+                                                className="w-full text-left px-4 py-2 hover:bg-gray-100">Completed
+                                        </button>
+                                    </li>
+                                </ul>
+                            )}
+                        </div>
+
+                        <ul className="space-y-4">
+                            {projectsFilter.map((project) => (
+                                <li
+                                    key={project.id}
+                                    className={`
+                    p-5 rounded-lg border-2 transition-all duration-200 ease-in-out cursor-pointer
+                    hover:bg-gray-50 hover:transform hover:shadow-md
+                    ${selectedProject?.id === project.id ? "bg-blue-50 border-blue-500 shadow-md scale-[1.02]" : "bg-white border-transparent"}
+                  `}
+                                    onClick={() => handleOnProjectClick(project)}
+                                >
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-1">{project.clientName}</h3>
+                                    <p className="text-gray-600 text-sm line-clamp-2">{project.description}</p>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 
-                    <ul className="space-y-4">
-                        {projectsFilter.map((project) => (
-                            <li
-                                key={project.id}
-                                className={`
-                        p-5 rounded-lg border-2 transition-all duration-200 ease-in-out cursor-pointer
-                        hover:bg-gray-50 hover:transform hover:-translate-y-1 hover:shadow-md
-                        ${selectedProject?.id === project.id ? "bg-blue-50 border-blue-500 shadow-md scale-105" : "bg-white border-transparent"}
-                    `}
-                                onClick={() => handleOnProjectClick(project)}
-                            >
-                                <h3 className="text-lg font-semibold text-blue-700 mb-1">{project.clientName}</h3>
-                                <p className="text-gray-600 text-sm line-clamp-2">{project.description}</p>
-                            </li>
-                        ))}
-                    </ul>
+                    {/* Project Details Column */}
+                    <section
+                        className="md:col-span-2 bg-white rounded-xl shadow-lg border border-gray-200 p-8 flex flex-col max-h-[80vh] overflow-y-auto">
+                        {selectedProject ? (
+                            <>
+                                <header className="mb-6">
+                                    <h2 className="text-2xl font-bold text-gray-800">{selectedProject.clientName}</h2>
+                                    <p className="text-gray-500 mt-1">{selectedProject.description}</p>
+                                </header>
+
+                                <div className="flex-1 flex flex-col lg:flex-row gap-6 items-start">
+                                    <div
+                                        className="w-full lg:w-1/2 flex justify-center items-center rounded-xl overflow-hidden shadow-inner">
+                                        <ImagePreview image={images.get(selectedProject?.id)?.[pageIndex]}/>
+                                    </div>
+                                    <div className="w-full lg:w-1/2">
+                                        <p className="text-gray-600 text-base leading-relaxed">
+                                            {images.get(selectedProject?.id)?.[pageIndex]?.description || ""}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <footer className="mt-6 flex justify-center">
+                                    <div className="inline-flex rounded-lg shadow-sm overflow-hidden border">
+                                        <button
+                                            className="px-4 py-2 font-bold text-white bg-gray-800 hover:bg-gray-700 disabled:opacity-50"
+                                            onClick={handlePageLeft}
+                                            disabled={pageIndex === 0}
+                                        >
+                                            «
+                                        </button>
+                                        <span className="px-4 py-2 font-bold text-gray-800 bg-gray-100">
+                      {pageIndex + 1} / {images.get(selectedProject.id)?.length}
+                    </span>
+                                        <button
+                                            className="px-4 py-2 font-bold text-white bg-gray-800 hover:bg-gray-700 disabled:opacity-50"
+                                            onClick={handlePageRight}
+                                            disabled={pageIndex === (images.get(selectedProject?.id)?.length ?? pageIndex + 1) - 1}
+                                        >
+                                            »
+                                        </button>
+                                    </div>
+                                </footer>
+                            </>
+                        ) : (
+                            <div className="flex flex-1 items-center justify-center">
+                                <div className="text-center text-gray-400">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.5}
+                                        stroke="currentColor"
+                                        className="w-14 h-14 mx-auto mb-3 text-gray-300"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"/>
+                                    </svg>
+                                    <p className="font-medium text-lg">Select a project to view details</p>
+                                </div>
+                            </div>
+                        )}
+                    </section>
                 </div>
+            </main>
 
-                <section className="md:col-span-2 bg-white rounded-2xl shadow-xl p-8 flex flex-col overflow-y-auto">
-                    {selectedProject ? (
-                        <>
-                            {/* Header */}
-                            <header className="mb-6">
-                                <h2 className="text-2xl font-extrabold text-blue-700">{selectedProject.clientName}</h2>
-                                <p className="text-gray-500 mt-1">{selectedProject.description}</p>
-                            </header>
-
-                            {/* Main content with image + description */}
-                            <div className="flex-1 flex flex-col md:flex-row gap-6 items-start">
-                                <div
-                                    className="flex-1 flex justify-center items-center bg-gray-50 rounded-xl shadow-inner p-4">
-                                    <ImagePreview image={images.get(selectedProject?.id)?.[pageIndex]}/>
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-gray-600 text-base leading-relaxed">
-                                        {images.get(selectedProject?.id)?.[pageIndex]?.description ?? ""}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Pagination / controls */}
-                            <footer className="mt-6 flex justify-center">
-                                <div className="inline-flex rounded-lg shadow-sm overflow-hidden border">
-                                    <button
-                                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 disabled:opacity-50"
-                                        onClick={handlePageLeft}
-                                        disabled={images.get(selectedProject.id)?.length === 0}
-                                    >
-                                        «
-                                    </button>
-                                    <span className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-100">
-                Page {images.get(selectedProject.id)?.length === 0 ? 0 : pageIndex + 1} / {images.get(selectedProject.id)?.length ?? 0}
-              </span>
-                                    <button
-                                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 disabled:opacity-50"
-                                        onClick={handlePageRight}
-                                        disabled={images.get(selectedProject.id)?.length === 0}
-                                    >
-                                        »
-                                    </button>
-                                </div>
-                            </footer>
-                        </>
-                    ) : (
-                        // Empty state
-                        <div className="flex flex-1 items-center justify-center">
-                            <div className="text-center text-gray-400">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="w-14 h-14 mx-auto mb-3 text-gray-300"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round"
-                                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"/>
-                                </svg>
-                                <p className="font-medium text-lg">Select a project to view details</p>
-                            </div>
-                        </div>
-                    )}
-                </section>
-            </div>
+            <footer className="bg-gray-800 text-white py-8 text-center mt-12">
+                <div className="container mx-auto px-6">
+                    <p>&copy; 2024 Siri Constructions. All Rights Reserved.</p>
+                </div>
+            </footer>
         </div>
     );
 }
