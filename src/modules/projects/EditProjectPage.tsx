@@ -14,7 +14,6 @@ const defaultProject = (uuid: string): Project => {
         clientName: "",
         description: "",
         current: false,
-        location: "",
         createdTime: new Date().toISOString()
     };
 };
@@ -261,17 +260,6 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
                                 onChange={handleTextChange}
                                 placeholder="Enter description"
                                 className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors min-h-[12rem]"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1">Location</label>
-                            <input
-                                name="location"
-                                value={projectForm.location ?? ""}
-                                onChange={handleTextChange}
-                                placeholder="Enter location"
-                                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
                             />
                         </div>
 
