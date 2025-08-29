@@ -7,6 +7,7 @@ import {employeeClient} from "../../client/EmployeeClient.ts";
 import {timeSheetClient} from "../../client/TimeSheetClient.ts";
 import type {TimeSheet} from "../../model/TimeSheet.ts";
 import {type RowDetail, RowState} from "../../model/Constants.ts";
+import {Select} from "@mantine/core";
 
 export default function EditTimeSheet({setAlerts}: AlertsProps) {
     const [employees, setEmployees] = useState<Employee[]>([]);
@@ -219,39 +220,107 @@ export default function EditTimeSheet({setAlerts}: AlertsProps) {
             </style>
 
             <main className="flex justify-center items-center py-25 px-6">
-                <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 w-full max-w-6xl overflow-x-auto">
+                <div
+                    className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 w-full max-w-6xl overflow-x-auto">
                     <h2 className="text-4xl font-extrabold text-gray-800 text-left mb-10 tracking-tight">
                         💼 Employee Timesheet Console
                     </h2>
 
-                    <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-6 mb-6">
+                    <div
+                        className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-6 mb-6">
                         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto">
-                            <div className="flex flex-col items-start gap-1 w-full md:w-auto">
-                                <label className="text-gray-600 text-sm font-medium">Select Employee</label>
-                                <select
-                                    className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
-                                    value={selectedEmployee?.id || ""}
-                                    onChange={(e) => handleSelectService(e.target.value)}
-                                >
-                                    <option value="">-- None selected --</option>
-                                    {employees.map((emp) => (
-                                        <option key={emp.id} value={emp.id}>
-                                            {emp.firstName} {emp.lastName}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                            <Select
+                                placeholder="Choose one"
+                                data={employees.map(data => {
+                                    return {"value": data.id, "label": data.firstName + " " + data.lastName}
+                                }).concat({"value": "", "label": "-- None selected --"})}
+                                value={selectedEmployee?.id || ""}
+                                onChange={(data) => handleSelectService(data ?? "")}
+                                classNames={{
+                                    input: "tw-like-input",
+                                }}
+                                label="Select Employee"
+                                searchable
+                                styles={{
+                                    // The visible input element
+                                    input: {
+                                        height: '100%',
+                                        width: '100%',
+                                        paddingLeft: '1rem',     // px-4
+                                        paddingRight: '1rem',
+                                        paddingTop: '0.75rem',   // py-3
+                                        paddingBottom: '0.75rem',
+                                        color: '#374151',        // text-gray-700
+                                        backgroundColor: '#F9FAFB', // bg-gray-50
+                                        border: '1px solid #D1D5DB', // border-gray-300
+                                        borderRadius: '0.5rem',  // rounded-lg
+                                        transition: 'border-color 150ms, box-shadow 150ms',
+                                        fontSize: '1.1rem',
+                                    },
+                                    // Dropdown panel
+                                    dropdown: {
+                                        border: '1px solid #E5E7EB',
+                                        borderRadius: '0.5rem',
+                                    },
+                                    // Options list container
+                                    options: {
+                                        fontSize: '1.125rem',
+                                    },
+                                    // Each option row
+                                    option: {padding: '0.4rem 1rem', fontSize: '1rem'},
+                                }}
+                            />
                             <DateInput
                                 value={startDate}
                                 onChange={setStartDate}
                                 placeholder="Pick month and year"
                                 label="Select Start Date"
+                                classNames={{
+                                    input: "tw-like-input",
+                                }}
+                                styles={{
+                                    // The visible input element
+                                    input: {
+                                        height: '100%',
+                                        width: '100%',
+                                        paddingLeft: '1rem',     // px-4
+                                        paddingRight: '1rem',
+                                        paddingTop: '0.75rem',   // py-3
+                                        paddingBottom: '0.75rem',
+                                        color: '#374151',        // text-gray-700
+                                        backgroundColor: '#F9FAFB', // bg-gray-50
+                                        border: '1px solid #D1D5DB', // border-gray-300
+                                        borderRadius: '0.5rem',  // rounded-lg
+                                        transition: 'border-color 150ms, box-shadow 150ms',
+                                        fontSize: '1.1rem',
+                                    }
+                                }}
                             />
                             <DateInput
                                 value={endDate}
                                 onChange={setEndDate}
                                 placeholder="Pick month and year"
                                 label="Select End Date"
+                                classNames={{
+                                    input: "tw-like-input",
+                                }}
+                                styles={{
+                                    // The visible input element
+                                    input: {
+                                        height: '100%',
+                                        width: '100%',
+                                        paddingLeft: '1rem',     // px-4
+                                        paddingRight: '1rem',
+                                        paddingTop: '0.75rem',   // py-3
+                                        paddingBottom: '0.75rem',
+                                        color: '#374151',        // text-gray-700
+                                        backgroundColor: '#F9FAFB', // bg-gray-50
+                                        border: '1px solid #D1D5DB', // border-gray-300
+                                        borderRadius: '0.5rem',  // rounded-lg
+                                        transition: 'border-color 150ms, box-shadow 150ms',
+                                        fontSize: '1.1rem',
+                                    }
+                                }}
                             />
                         </div>
 
@@ -295,7 +364,8 @@ export default function EditTimeSheet({setAlerts}: AlertsProps) {
                             </thead>
                             <tbody>
                             {timeSheets.map((row) => (
-                                <tr key={row.id} className="shadow-md bg-white hover:shadow-lg hover:-translate-y-1 transition-all rounded-lg">
+                                <tr key={row.id}
+                                    className="shadow-md bg-white hover:shadow-lg hover:-translate-y-1 transition-all rounded-lg">
                                     <td className="p-4 rounded-l-lg">
                                         <DateInput
                                             readOnly={!rowTimesheet.get(row.id)?.editable}

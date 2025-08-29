@@ -8,6 +8,7 @@ import {imageUtil} from "../../common/ImageUtil.ts";
 import ImagePreview from "../ImagePreview.tsx";
 import {TrashIcon} from "@heroicons/react/24/outline";
 import {EditIcon} from "lucide-react";
+import {Select} from "@mantine/core";
 
 const defaultProject = (uuid: string): Project => {
     return {
@@ -250,16 +251,46 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-1">Select Existing
                                 Service</label>
-                            <select
-                                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
+                            <Select
+                                placeholder="Choose one"
+                                data={projects.map(data => {
+                                    return {"value": data.id, "label": data.clientName}
+                                }).concat({"value": "", "label": "-- None selected --"})}
                                 value={selectedProject?.id || ""}
-                                onChange={(e) => handleSelectService(e.target.value)}
-                            >
-                                <option value="">-- None selected --</option>
-                                {projects.map(prj => (
-                                    <option key={prj.id} value={prj.id}>{prj.clientName}</option>
-                                ))}
-                            </select>
+                                onChange={(data) => handleSelectService(data ?? "")}
+                                classNames={{
+                                    input: "tw-like-input",
+                                }}
+                                searchable
+                                styles={{
+                                    // The visible input element
+                                    input: {
+                                        height: '100%',
+                                        width: '100%',
+                                        paddingLeft: '1rem',     // px-4
+                                        paddingRight: '1rem',
+                                        paddingTop: '0.75rem',   // py-3
+                                        paddingBottom: '0.75rem',
+                                        color: '#374151',        // text-gray-700
+                                        backgroundColor: '#F9FAFB', // bg-gray-50
+                                        border: '1px solid #D1D5DB', // border-gray-300
+                                        borderRadius: '0.5rem',  // rounded-lg
+                                        transition: 'border-color 150ms, box-shadow 150ms',
+                                        fontSize: '1.1rem',
+                                    },
+                                    // Dropdown panel
+                                    dropdown: {
+                                        border: '1px solid #E5E7EB',
+                                        borderRadius: '0.5rem',
+                                    },
+                                    // Options list container
+                                    options: {
+                                        fontSize: '1.125rem',
+                                    },
+                                    // Each option row
+                                    option: {padding: '0.4rem 1rem',fontSize: '1rem'},
+                                }}
+                            />
                         </div>
 
                         <div>

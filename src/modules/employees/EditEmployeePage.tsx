@@ -7,6 +7,7 @@ import ImagePreview from "../ImagePreview.tsx";
 import type {Employee} from "../../model/Employee.ts";
 import {employeeClient} from "../../client/EmployeeClient.ts";
 import {DateInput} from "@mantine/dates";
+import {Select} from "@mantine/core";
 
 const defaultEmployee = (uuid: string): Employee => {
     return {
@@ -170,26 +171,57 @@ export default function EditEmployeePage({setAlerts}: AlertsProps) {
             </style>
 
             <main className="flex items-center justify-center py-25 px-6">
-                <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col md:flex-row gap-8">
+                <div
+                    className="w-full max-w-5xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col md:flex-row gap-8">
                     <div className="flex-1 flex flex-col gap-6">
                         <h1 className="text-3xl font-bold text-gray-800 text-center md:text-left mb-2">
                             {selectedEmployee ? "Edit Employee" : "Add New Employee"}
                         </h1>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1">Select Existing Employee</label>
-                            <select
-                                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Select Existing
+                                Employee</label>
+                            <Select
+                                placeholder="Choose one"
+                                data={employees.map(data => {
+                                    return {"value": data.id, "label": data.firstName + " " + data.lastName}
+                                }).concat({"value": "", "label": "-- None selected --"})}
                                 value={selectedEmployee?.id || ""}
-                                onChange={(e) => handleSelectService(e.target.value)}
-                            >
-                                <option value="">-- None selected --</option>
-                                {employees.map((emp) => (
-                                    <option key={emp.id} value={emp.id}>
-                                        {emp.firstName} {emp.lastName}
-                                    </option>
-                                ))}
-                            </select>
+                                onChange={(data) => handleSelectService(data ?? "")}
+                                classNames={{
+                                    input: "tw-like-input",
+                                }}
+                                searchable
+                                styles={{
+                                    // The visible input element
+                                    input: {
+                                        height: '100%',
+                                        width: '100%',
+                                        paddingLeft: '1rem',     // px-4
+                                        paddingRight: '1rem',
+                                        paddingTop: '0.75rem',   // py-3
+                                        paddingBottom: '0.75rem',
+                                        color: '#374151',        // text-gray-700
+                                        backgroundColor: '#F9FAFB', // bg-gray-50
+                                        border: '1px solid #D1D5DB', // border-gray-300
+                                        borderRadius: '0.5rem',  // rounded-lg
+                                        transition: 'border-color 150ms, box-shadow 150ms',
+                                        fontSize: '1.1rem',
+                                    },
+                                    // Dropdown panel
+                                    dropdown: {
+                                        border: '1px solid #E5E7EB',
+                                        borderRadius: '0.5rem',
+                                    },
+                                    // Options list container
+                                    options: {
+                                        fontSize: '1.125rem',
+                                    },
+                                    // Each option row
+                                    option: {padding: '0.4rem 1rem', fontSize: '1rem'},
+                                }}
+                            />
+
                         </div>
 
                         <div>
@@ -275,8 +307,9 @@ export default function EditEmployeePage({setAlerts}: AlertsProps) {
                     </div>
 
                     <div className="flex-shrink-0 flex items-center justify-center p-4 md:p-8">
-                        <div className="w-64 h-64 bg-gray-200 rounded-2xl shadow-lg border-2 border-gray-300 overflow-hidden flex items-center justify-center p-2">
-                            <ImagePreview image={imageForm} />
+                        <div
+                            className="w-64 h-64 bg-gray-200 rounded-2xl shadow-lg border-2 border-gray-300 overflow-hidden flex items-center justify-center p-2">
+                            <ImagePreview image={imageForm}/>
                         </div>
                     </div>
                 </div>
