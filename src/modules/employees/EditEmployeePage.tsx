@@ -153,132 +153,139 @@ export default function EditEmployeePage({setAlerts}: AlertsProps) {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 px-10 py-25">
-            <div
-                className="w-full max-w-5xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col md:flex-row gap-8">
+        <div className="antialiased font-inter bg-gray-50 min-h-screen">
+            <style>
+                {`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@500;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F4F6F8;
+            color: #1a202c;
+        }
+        h1, h2, h3, h4, .font-oswald {
+            font-family: 'Oswald', sans-serif;
+        }
+        `}
+            </style>
 
-                {/* Form Fields Section */}
-                <div className="flex-1 flex flex-col gap-6">
-                    <h1 className="text-3xl font-bold text-blue-700 text-center md:text-left mb-2">
-                        {selectedEmployee ? "Edit Employee" : "Add New Employee"}
-                    </h1>
+            <main className="flex items-center justify-center py-25 px-6">
+                <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col md:flex-row gap-8">
+                    <div className="flex-1 flex flex-col gap-6">
+                        <h1 className="text-3xl font-bold text-gray-800 text-center md:text-left mb-2">
+                            {selectedEmployee ? "Edit Employee" : "Add New Employee"}
+                        </h1>
 
-                    {/* Select Existing Employee */}
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Select Existing
-                            Employee</label>
-                        <select
-                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                            value={selectedEmployee?.id || ""}
-                            onChange={(e) => handleSelectService(e.target.value)}
-                        >
-                            <option value="">-- None selected --</option>
-                            {employees.map((emp) => (
-                                <option key={emp.id} value={emp.id}>
-                                    {emp.firstName} {emp.lastName}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Select Existing Employee</label>
+                            <select
+                                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
+                                value={selectedEmployee?.id || ""}
+                                onChange={(e) => handleSelectService(e.target.value)}
+                            >
+                                <option value="">-- None selected --</option>
+                                {employees.map((emp) => (
+                                    <option key={emp.id} value={emp.id}>
+                                        {emp.firstName} {emp.lastName}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
-                    {/* ID Field */}
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">ID</label>
-                        <p className="px-4 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-lg">{employeeForm.id}</p>
-                    </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">ID</label>
+                            <p className="px-4 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-lg">{employeeForm.id}</p>
+                        </div>
 
-                    {/* First Name */}
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">First Name</label>
-                        <input
-                            type="text"
-                            name="firstName"
-                            value={employeeForm.firstName}
-                            onChange={handleTextChange}
-                            placeholder="Enter first name"
-                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">First Name</label>
+                            <input
+                                type="text"
+                                name="firstName"
+                                value={employeeForm.firstName}
+                                onChange={handleTextChange}
+                                placeholder="Enter first name"
+                                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Last Name</label>
+                            <input
+                                type="text"
+                                name="lastName"
+                                value={employeeForm.lastName}
+                                onChange={handleTextChange}
+                                placeholder="Enter last name"
+                                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
+                            <input
+                                type="text"
+                                name="email"
+                                value={employeeForm.email}
+                                onChange={handleTextChange}
+                                placeholder="Enter email"
+                                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
+                            />
+                        </div>
+
+                        <DateInput
+                            value={employeeForm.dob}
+                            onChange={handleDateChange}
+                            placeholder="Pick month and year"
+                            label="Select Date of Birth"
                         />
-                    </div>
 
-                    {/* Last Name */}
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Last Name</label>
-                        <input
-                            type="text"
-                            name="lastName"
-                            value={employeeForm.lastName}
-                            onChange={handleTextChange}
-                            placeholder="Enter last name"
-                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                        />
-                    </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Add Image</label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300 transition-colors"
+                            />
+                        </div>
 
-                    {/* Email */}
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
-                        <input
-                            type="text"
-                            name="email"
-                            value={employeeForm.email}
-                            onChange={handleTextChange}
-                            placeholder="Enter email"
-                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                        />
-                    </div>
-
-                    {/* Date Picker */}
-                    <DateInput
-                        value={employeeForm.dob}
-                        onChange={handleDateChange}
-                        placeholder="Pick month and year"
-                        label="Select Month & Year"
-                        valueFormat="YYYY/MM/DD"
-                    />
-
-                    {/* Image Upload */}
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Add Image</label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors"
-                        />
-                    </div>
-
-                    {/* Buttons */}
-                    <div className="mt-4 flex flex-col sm:flex-row gap-4">
-                        {selectedEmployee ? (
-                            <>
+                        <div className="mt-4 flex flex-col sm:flex-row gap-4">
+                            {selectedEmployee ? (
+                                <>
+                                    <button
+                                        className="flex-1 py-3 text-lg font-semibold text-white bg-orange-600 rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={isInvalid} onClick={handleEdit}>
+                                        Save
+                                    </button>
+                                    <button
+                                        className="flex-1 py-3 text-lg font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={isInvalid} onClick={handleDelete}>
+                                        Delete
+                                    </button>
+                                </>
+                            ) : (
                                 <button
-                                    className="flex-1 py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                    disabled={isInvalid} onClick={handleEdit}>
-                                    Save
+                                    className="w-full py-3 text-lg font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={isInvalid} onClick={handleAdd}>
+                                    Add
                                 </button>
-                                <button
-                                    className="flex-1 py-3 text-lg font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                    disabled={isInvalid} onClick={handleDelete}>
-                                    Delete
-                                </button>
-                            </>
-                        ) : (
-                            <button
-                                className="w-full py-3 text-lg font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                disabled={isInvalid} onClick={handleAdd}>
-                                Add
-                            </button>
-                        )}
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="flex-shrink-0 flex items-center justify-center p-4 md:p-8">
+                        <div className="w-64 h-64 bg-gray-200 rounded-2xl shadow-lg border-2 border-gray-300 overflow-hidden flex items-center justify-center p-2">
+                            <ImagePreview image={imageForm} />
+                        </div>
                     </div>
                 </div>
-
-                {/* Image Preview Section */}
-                <div className="flex-shrink-0 flex items-center justify-center p-4 md:p-8">
-                    <div
-                        className="w-64 h-64 bg-gray-200 rounded-2xl shadow-lg border-2 border-gray-300 overflow-hidden flex items-center justify-center p-2">
-                        <ImagePreview image={imageForm}/>
-                    </div>
+            </main>
+            <footer className="bg-gray-800 text-white py-8 text-center mt-12">
+                <div className="container mx-auto px-6">
+                    <p>&copy; 2024 Siri Constructions. All Rights Reserved.</p>
                 </div>
-            </div>
+            </footer>
         </div>
     );
 }

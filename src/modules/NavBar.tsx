@@ -216,23 +216,21 @@ export default function Navbar({setAlerts}: AlertsProps) {
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     </form>
                     <div className="text-center">
-                        <h1 className="text-2xl md:text-3xl font-extrabold text-blue-600 mb-6 md:mb-8">
+                        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 md:mb-8">
                             👋 Admin Login
                         </h1>
-
                         <div className="mb-4">
                             <input
                                 type="password"
                                 placeholder="Enter password..."
                                 onChange={(e) => handleTokenChange(e.target.value)}
-                                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
                             />
                         </div>
-
                         <div className="mt-6">
                             <button
                                 onClick={handleAuthenticate}
-                                className="w-full py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                                className="w-full py-3 text-lg font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
                             >
                                 Authenticate
                             </button>
