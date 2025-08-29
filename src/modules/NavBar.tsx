@@ -212,7 +212,7 @@ export default function Navbar({setAlerts}: AlertsProps) {
                     </div>
                 </div>
 
-                <div className="drawer-side pt-19 z-15">
+                <div className="drawer-side pt-19 z-50">
                     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul
                         tabIndex={0}
