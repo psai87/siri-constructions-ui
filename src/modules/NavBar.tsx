@@ -120,12 +120,26 @@ export default function Navbar({setAlerts}: AlertsProps) {
 
     return (
         <>
+            <style>
+                {`
+                    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@500;700&display=swap');
+                    
+                    body {
+                        font-family: 'Inter', sans-serif;
+                        background-color: #F4F6F8;
+                        color: #1a202c;
+                    }
+                    h1, h2, h3, h4, .font-oswald {
+                        font-family: 'Oswald', sans-serif;
+                    }
+                    `}
+            </style>
             <div className="drawer">
                 <input id="my-drawer-3" type="checkbox" className="drawer-toggle"/>
                 <div className="drawer-content flex flex-col">
 
                     <div
-                        className="navbar bg-base-100 border-b border-gray-200 shadow-xl fixed top-0 w-full z-50 px-4 md:px-8 py-4"
+                        className="navbar bg-white border-b border-gray-200 shadow-lg fixed top-0 w-full z-50 px-4 md:px-8 py-4"
                         data-theme="light">
 
                         <div className="flex-none">
@@ -158,13 +172,13 @@ export default function Navbar({setAlerts}: AlertsProps) {
                                     <div key={idx} className="dropdown dropdown-hover relative">
                                         <label
                                             tabIndex={idx}
-                                            className="px-4 py-2 text-lg font-semibold rounded-lg cursor-pointer hover:bg-gray-200  transition-all"
+                                            className="px-4 py-2.5 text-lg font-semibold rounded-lg cursor-pointer hover:bg-gray-200  transition-all"
                                         >
                                             {item.name}
                                         </label>
                                         <ul
                                             tabIndex={idx}
-                                            className="dropdown-content menu p-3 shadow-xl bg-base-100 rounded-lg w-52 text-base mt-1.5"
+                                            className="dropdown-content menu p-3 shadow-lg bg-white rounded-lg w-52 text-base mt-1.5"
                                         >
                                             {item.submenu.map((sub: Menu, subIdx: number) => (
                                                 <li key={subIdx}>
@@ -177,7 +191,7 @@ export default function Navbar({setAlerts}: AlertsProps) {
                                                         </button>
                                                     ) : (
                                                         // Regular link for other items
-                                                        <Link to={sub.path ?? "/"}>{sub.name}</Link>
+                                                        <Link className={"px-4 py-2 text-lg font-semibold rounded-lg hover:bg-gray-200 transition-all"} to={sub.path ?? "/"}>{sub.name}</Link>
                                                     )}
                                                 </li>
                                             ))}
@@ -202,7 +216,7 @@ export default function Navbar({setAlerts}: AlertsProps) {
                     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul
                         tabIndex={0}
-                        className="dropdown-content menu shadow-xl bg-base-100 rounded-box min-h-full w-80 p-4 text-lg"
+                        className="dropdown-content menu shadow-lg bg-white rounded-box min-h-full w-80 p-4 text-lg"
                     >
                         {renderMenuItems(navAdminItems)}
                     </ul>
