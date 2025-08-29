@@ -204,7 +204,7 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
           }
         `}
             </style>
-            <main className="flex items-center justify-center py-12 md:py-20 px-6">
+            <main className="flex items-center justify-center py-25 px-6">
                 <div className="w-full max-w-7xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col lg:flex-row gap-8">
                     <div className="flex-1 flex flex-col gap-6 w-full">
                         <h1 className="text-3xl font-bold text-gray-800 text-center md:text-left mb-2">
