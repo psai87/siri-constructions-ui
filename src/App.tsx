@@ -2,7 +2,6 @@ import {HashRouter as Router, Route, Routes} from "react-router-dom";
 import Navbar from "./modules/NavBar.tsx";
 import AboutPage from "./modules/about/AboutPage.tsx";
 import ContactPage from "./modules/contact/ContactPage.tsx";
-import LoginPage from "./modules/login/LoginPage.tsx";
 import EditServicePage from "./modules/service/EditServicePage.tsx";
 import ToastBar from "./modules/ToastBar.tsx";
 import {useState} from "react";
@@ -22,7 +21,7 @@ export default function App() {
     return (
         <Router>
             <div data-theme="light" className="min-h-screen bg-base-100">
-                <Navbar/>
+                <Navbar alerts={alerts} setAlerts={setAlerts}/>
                 <Routes>
                     <Route path="/" element={<AboutPage/>}/>
                     <Route path="/contact" element={<ContactPage/>}/>
@@ -30,8 +29,6 @@ export default function App() {
                            element={<EditServicePage alerts={alerts} setAlerts={setAlerts}/>}/>
                     <Route path="/services"
                            element={<ViewServicePage alerts={alerts} setAlerts={setAlerts}/>}/>
-                    <Route path="/login"
-                           element={<LoginPage alerts={alerts} setAlerts={setAlerts}/>}/>
                     <Route path="/employees"
                            element={<ViewEmployeePage alerts={alerts} setAlerts={setAlerts}/>}/>
                     <Route path="/employees/edit"

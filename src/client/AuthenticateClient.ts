@@ -16,4 +16,7 @@ export default class AuthenticateClient {
         }
         return await response.json() as AuthenticateResponse;
     }
+
 }
+
+export const authenticateClient: AuthenticateClient = new AuthenticateClient();
