@@ -15,7 +15,7 @@ const defaultProject = (uuid: string): Project => {
         description: "",
         current: false,
         location: "",
-        createdTime: new Date().toISOString().slice(0, 19)
+        createdTime: new Date().toISOString()
     };
 };
 const defaultImage = (uuid: string, defaultProject: Project): Image => {
@@ -25,7 +25,7 @@ const defaultImage = (uuid: string, defaultProject: Project): Image => {
         refId: defaultProject.id,
         description: null,
         image: "",
-        createdTime: new Date().toISOString().slice(0, 19)
+        createdTime: new Date().toISOString()
     }
 }
 

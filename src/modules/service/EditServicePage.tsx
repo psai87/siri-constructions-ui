@@ -12,7 +12,7 @@ const defaultService = (uuid: string): AvailableService => {
         id: uuid,
         name: "",
         description: "",
-        createdTime: new Date().toISOString().slice(0, 19)
+        createdTime: new Date().toISOString()
     };
 };
 const defaultImage = (uuid: string, defaultService: AvailableService): Image => {
@@ -22,7 +22,7 @@ const defaultImage = (uuid: string, defaultService: AvailableService): Image => 
         refId: defaultService.id,
         description: null,
         image: "",
-        createdTime: new Date().toISOString().slice(0, 19)
+        createdTime: new Date().toISOString()
     }
 }
 
@@ -82,6 +82,8 @@ export default function EditServicePage({setAlerts}: AlertsProps) {
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target;
+        console.log("name", name);
+        console.log("value", value);
         setServiceForm({...serviceForm, [name]: value});
     };
 
