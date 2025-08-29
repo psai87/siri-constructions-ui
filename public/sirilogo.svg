@@ -1,34 +1,6 @@
-<svg width="1400" height="512" viewBox="0 0 1400 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Siri Constructions logo">
-  <defs>
-    <!-- Gradient for text highlight -->
-    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#4FC3F7"></stop>
-      <stop offset="100%" stop-color="#0288D1"></stop>
-    </linearGradient>
-
-    <!-- Glow filter -->
-    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="6" result="blur"></feGaussianBlur>
-      <feMerge>
-        <feMergeNode in="blur"></feMergeNode>
-        <feMergeNode in="SourceGraphic"></feMergeNode>
-      </feMerge>
-    </filter>
-  </defs>
-
-  <!-- Logo symbol: wave orb -->
-  <g transform="translate(120,256)">
-    <circle r="90" fill="url(#textGrad)" opacity="0.9"></circle>
-    <path d="M -60 0 C -40 -30, -20 30, 0 0 S 40 -30, 60 0" stroke="#FFFFFF" stroke-width="5" fill="none" opacity="0.85" filter="url(#softGlow)"></path>
-  </g>
-
-  <!-- Brand name -->
-  <text x="260" y="290" font-family="Helvetica, Arial, sans-serif" font-size="120" font-weight="700" letter-spacing="3" fill="url(#textGrad)">
-    Siri Constructions
-  </text>
-
-  <!-- Subtle shadow text -->
-  <text x="260" y="290" font-family="Helvetica, Arial, sans-serif" font-size="120" font-weight="700" letter-spacing="3" fill="none" stroke="#000000" stroke-width="3" opacity="0.25">
-    Siri Constructions
-  </text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+    <!-- Geometric 'S' made from stacked blocks -->
+    <rect x="2" y="2" width="16" height="6" fill="#1f2937"/>
+    <rect x="6" y="9" width="16" height="6" fill="#ea580c"/>
+    <rect x="2" y="16" width="16" height="6" fill="#1f2937"/>
 </svg>
