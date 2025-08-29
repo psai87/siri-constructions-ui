@@ -154,7 +154,7 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
                 .then(() => showAlert("success", "Image deleted successfully."))
                 .catch(error => {
                     showAlert("error", error.message);
-                    handleSelectService(null)
+                    handleSelectService("")
                 })
         }
     };
