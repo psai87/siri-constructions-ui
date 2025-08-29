@@ -94,7 +94,7 @@ export default function ViewProjectPage({setAlerts}: AlertsProps) {
         `}
             </style>
 
-            <main className="container mx-auto px-6 py-12 md:py-20">
+            <main className="container mx-auto px-6 py-25">
                 <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center text-gray-800">
                     Our Projects
                 </h1>

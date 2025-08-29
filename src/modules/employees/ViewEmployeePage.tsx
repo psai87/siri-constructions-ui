@@ -50,7 +50,7 @@ export default function ViewEmployeePage({setAlerts}: AlertsProps) {
         `}
             </style>
 
-            <main className="container mx-auto px-6 py-12 md:py-20">
+            <main className="container mx-auto px-6 py-25">
                 <section id="team-gallery" className="mb-16">
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center text-gray-800">
                         Our Team
