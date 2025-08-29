@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import type {Menu} from "../model/Menu.ts";
-import type {JSX} from "react";
+import {type JSX, useState} from "react";
 import {AuthState} from "../model/Constants.ts";
 import {authenticateClient} from "../client/AuthenticateClient.ts";
 import type {AlertsProps} from "../model/Props.ts";
@@ -14,39 +14,12 @@ const navItems: Menu[] = [
         path: "/projects",
     } as Menu,
     {
-        name: "Employees", path: "/employees"
-    } as Menu,
-    {
         name: "Admin",
         submenu: [
             {name: "Login"}
         ] as Menu[],
     } as Menu,
 ];
-
-const navAdminItems: Menu[] = navItems.slice(0, -1)
-    .concat({
-        name: "Admin",
-        submenu: [
-            {name: "Login"},
-            {
-                name: "Services",
-                submenu: [{name: "Edit Service", path: "/services/edit"}] as Menu[],
-            } as Menu,
-            {
-                name: "Projects",
-                submenu: [{name: "Edit Project", path: "/projects/edit"}] as Menu[],
-            } as Menu,
-            {
-                name: "Employees",
-                submenu: [{name: "Edit Employee", path: "/employees/edit"}] as Menu[],
-            } as Menu,
-            {
-                name: "Timesheets",
-                submenu: [{name: "Edit Timesheet", path: "/timesheets/edit"}] as Menu[],
-            } as Menu
-        ] as Menu[],
-    } as Menu)
 
 
 function renderMenuItems(items: Menu[]): JSX.Element[] {
@@ -93,6 +66,34 @@ const handleLinkClick = () => {
 
 export default function Navbar({setAlerts}: AlertsProps) {
 
+    const [authenticated, setAuthenticated] = useState<boolean>(false);
+    const navAdminItems: Menu[] = authenticated ? navItems.slice(0, -1)
+        .concat({
+            name: "Admin",
+            submenu: [
+                {name: "Login"},
+                {
+                    name: "Services",
+                    submenu: [{name: "Edit Service", path: "/services/edit"}] as Menu[],
+                } as Menu,
+                {
+                    name: "Projects",
+                    submenu: [{name: "Edit Project", path: "/projects/edit"}] as Menu[],
+                } as Menu,
+                {
+                    name: "Employees",
+                    submenu: [{name: "View Employee", path: "/employees"}, {
+                        name: "Edit Employee",
+                        path: "/employees/edit"
+                    }] as Menu[],
+                } as Menu,
+                {
+                    name: "Timesheets",
+                    submenu: [{name: "Edit Timesheet", path: "/timesheets/edit"}] as Menu[],
+                } as Menu
+            ] as Menu[],
+        } as Menu) : navItems;
+
     function handleTokenChange(value: string) {
         AuthState.token = value;
     }
@@ -101,10 +102,12 @@ export default function Navbar({setAlerts}: AlertsProps) {
         authenticateClient.authenticate()
             .then(() => {
                 console.log("Authentication Successful")
+                setAuthenticated(true);
                 showAlert("success", "Authentication Successful");
                 (document.getElementById('login_modal') as HTMLDialogElement)?.close();
             })
             .catch(err => {
+                setAuthenticated(false);
                 console.log(err)
                 showAlert("error", "Authentication Failed");
             });
