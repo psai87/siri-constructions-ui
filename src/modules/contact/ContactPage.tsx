@@ -17,7 +17,7 @@ export default function ContactPage() {
         `}
             </style>
 
-            <main className="container mx-auto px-6 py-12 md:py-20">
+            <main className="container mx-auto px-6 py-25">
                 <section id="contact-info" className="mb-16">
                     <h1 className="text-4xl md:text-5xl font-bold mb-12 text-center text-gray-800">
                         Contact Us
