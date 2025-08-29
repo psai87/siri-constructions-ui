@@ -68,7 +68,8 @@ export default function EditTimeSheet({setAlerts}: AlertsProps) {
             id: crypto.randomUUID(),
             employeeId: selectedEmployee!.id,
             date: "",
-            hours: 0
+            hours: 0,
+            createdTime: new Date().toISOString().slice(0, 19)
         };
         const newRowDetail: RowDetail = {
             editable: false,

@@ -14,7 +14,8 @@ const defaultProject = (uuid: string): Project => {
         clientName: "",
         description: "",
         current: false,
-        location: ""
+        location: "",
+        createdTime: new Date().toISOString().slice(0, 19)
     };
 };
 const defaultImage = (uuid: string, defaultProject: Project): Image => {
@@ -23,7 +24,8 @@ const defaultImage = (uuid: string, defaultProject: Project): Image => {
         id: uuid,
         refId: defaultProject.id,
         description: null,
-        image: ""
+        image: "",
+        createdTime: new Date().toISOString().slice(0, 19)
     }
 }
 

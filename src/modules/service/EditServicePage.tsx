@@ -11,7 +11,8 @@ const defaultService = (uuid: string): AvailableService => {
     return {
         id: uuid,
         name: "",
-        description: ""
+        description: "",
+        createdTime: new Date().toISOString().slice(0, 19)
     };
 };
 const defaultImage = (uuid: string, defaultService: AvailableService): Image => {
@@ -20,7 +21,8 @@ const defaultImage = (uuid: string, defaultService: AvailableService): Image => 
         id: uuid,
         refId: defaultService.id,
         description: null,
-        image: ""
+        image: "",
+        createdTime: new Date().toISOString().slice(0, 19)
     }
 }
 

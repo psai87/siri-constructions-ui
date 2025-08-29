@@ -14,7 +14,8 @@ const defaultEmployee = (uuid: string): Employee => {
         firstName: "",
         lastName: "",
         email: undefined,
-        dob: "1900/01/01"
+        dob: "1900/01/01",
+        createdTime: new Date().toISOString().slice(0, 19)
     };
 };
 const defaultImage = (uuid: string, defaultEmployee: Employee): Image => {
@@ -23,7 +24,8 @@ const defaultImage = (uuid: string, defaultEmployee: Employee): Image => {
         id: uuid,
         refId: defaultEmployee.id,
         description: null,
-        image: ""
+        image: "",
+        createdTime: new Date().toISOString().slice(0, 19)
     }
 }
 
