@@ -7,6 +7,7 @@ import {projectClient} from "../../client/ProjectClient.ts";
 import {imageUtil} from "../../common/ImageUtil.ts";
 import ImagePreview from "../ImagePreview.tsx";
 import {TrashIcon} from "@heroicons/react/24/outline";
+import {EditIcon} from "lucide-react";
 
 const defaultProject = (uuid: string): Project => {
     return {
@@ -114,18 +115,53 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
     };
 
     const handleAddImageButton = () => {
-        setImageForms((images) => {
-            const newImages = [...images, selectedImageForm]
-            setPageIndex(newImages.length - 1)
-            return newImages;
-        });
+        const imageFound = imageForms.find((image,) => image.id == selectedImageForm.id);
+        if (imageFound) {
+            setImageForms((images) => {
+                const newImages = [...images.filter((_, index) => pageIndex != index), selectedImageForm];
+                setPageIndex(newImages.length - 1)
+                return newImages;
+            });
+            imageClient.updateImages([selectedImageForm])
+                .then(() => showAlert("success", "Image updated successfully."))
+                .catch(error => {
+                    showAlert("error", error.message);
+                    handleSelectService(selectedImageForm.id)
+                })
+        } else {
+            setImageForms((images) => {
+                const newImages = [...images, selectedImageForm]
+                setPageIndex(newImages.length - 1)
+                return newImages;
+            });
+            imageClient.createImages([selectedImageForm])
+                .then(() => showAlert("success", "Image added successfully."))
+                .catch(error => {
+                    showAlert("error", error.message);
+                    handleSelectService(selectedImageForm.id)
+                })
+        }
         setSelectedImageForm(defaultImage(crypto.randomUUID(), projectForm));
     };
 
     const handleDeleteImageButton = () => {
+        const delImage = imageForms.find((_, index) => pageIndex == index)
         setImageForms((images) => images.filter((_, index) => pageIndex != index));
         setSelectedImageForm(defaultImage(crypto.randomUUID(), projectForm))
         setPageIndex(0)
+        if (delImage) {
+            imageClient.deleteImages([delImage.id])
+                .then(() => showAlert("success", "Image deleted successfully."))
+                .catch(error => {
+                    showAlert("error", error.message);
+                    handleSelectService(null)
+                })
+        }
+    };
+
+    const handleEditImageButton = () => {
+        const image = imageForms.find((_, index) => pageIndex == index);
+        setSelectedImageForm(image ?? defaultImage(crypto.randomUUID(), projectForm));
     };
 
 
@@ -204,14 +240,16 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
         `}
             </style>
             <main className="flex items-center justify-center py-25 px-6">
-                <div className="w-full max-w-7xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col lg:flex-row gap-8">
+                <div
+                    className="w-full max-w-7xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col lg:flex-row gap-8">
                     <div className="flex-1 flex flex-col gap-6 w-full">
                         <h1 className="text-3xl font-bold text-gray-800 text-center md:text-left mb-2">
                             {selectedProject ? "Edit Project" : "Add New Project"}
                         </h1>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1">Select Existing Service</label>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Select Existing
+                                Service</label>
                             <select
                                 className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
                                 value={selectedProject?.id || ""}
@@ -267,7 +305,8 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
                             <h2 className="text-xl font-bold text-gray-800">Image Details</h2>
 
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Image Description</label>
+                                <label className="block text-sm font-semibold text-gray-700 mb-1">Image
+                                    Description</label>
                                 <textarea
                                     name="description"
                                     value={selectedImageForm.description ?? ""}
@@ -299,44 +338,67 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
                         <div className="mt-4 flex flex-col sm:flex-row gap-4">
                             {selectedProject ? (
                                 <>
-                                    <button className="flex-1 py-3 text-lg font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled={isInvalid} onClick={handleEdit}>
+                                    <button
+                                        className="flex-1 py-3 text-lg font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={isInvalid} onClick={handleEdit}>
                                         Save
                                     </button>
-                                    <button className="flex-1 py-3 text-lg font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled={isInvalid} onClick={handleDelete}>
+                                    <button
+                                        className="flex-1 py-3 text-lg font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={isInvalid} onClick={handleDelete}>
                                         Delete
                                     </button>
                                 </>
                             ) : (
-                                <button className="w-full py-3 text-lg font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled={isInvalid} onClick={handleAdd}>
+                                <button
+                                    className="w-full py-3 text-lg font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={isInvalid} onClick={handleAdd}>
                                     Save
                                 </button>
                             )}
                         </div>
                     </div>
 
-                    <div className="flex-1 flex flex-col gap-6 w-full p-4 md:p-8 bg-gray-50 rounded-xl shadow-inner border border-gray-200">
+                    <div
+                        className="flex-1 flex flex-col gap-6 w-full p-4 md:p-8 bg-gray-50 rounded-xl shadow-inner border border-gray-200">
                         <div className="flex items-center justify-between">
                             <div className="flex gap-2">
-                                <button className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-200 rounded-l-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed" onClick={handlePageLeft} disabled={imageForms.length <= 1 || pageIndex === 0}>
+                                <button
+                                    className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-200 rounded-l-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    onClick={handlePageLeft} disabled={imageForms.length <= 1 || pageIndex === 0}>
                                     «
                                 </button>
-                                <span className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 border-x border-gray-300">
+                                <span
+                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 border-x border-gray-300">
                   Pages {imageForms.length === 0 ? 0 : pageIndex + 1}/{imageForms.length}
                 </span>
-                                <button className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-200 rounded-r-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed" onClick={handlePageRight} disabled={imageForms.length <= 1 || pageIndex === imageForms.length - 1}>
+                                <button
+                                    className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-200 rounded-r-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    onClick={handlePageRight}
+                                    disabled={imageForms.length <= 1 || pageIndex === imageForms.length - 1}>
                                     »
                                 </button>
                             </div>
-                            <button
-                                className="p-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                disabled={imageForms.length <= 0}
-                                onClick={handleDeleteImageButton}
-                            >
-                                <TrashIcon className="h-5 w-5"/>
-                            </button>
+                            <div className="flex gap-2">
+                                <button
+                                    className="p-3 text-white bg-gray-800 hover:bg-gray-700 rounded-full  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={imageForms.length <= 0}
+                                    onClick={handleEditImageButton}
+                                >
+                                    <EditIcon className="h-5 w-5"/>
+                                </button>
+                                <button
+                                    className="p-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={imageForms.length <= 0}
+                                    onClick={handleDeleteImageButton}
+                                >
+                                    <TrashIcon className="h-5 w-5"/>
+                                </button>
+                            </div>
                         </div>
 
-                        <div className="w-full h-96 flex flex-col items-center justify-center bg-white rounded-lg shadow-md border-2 border-gray-300 p-2">
+                        <div
+                            className="w-full h-96 flex flex-col items-center justify-center bg-white rounded-lg shadow-md border-2 border-gray-300 p-2">
                             <ImagePreview image={imageForms[pageIndex]}/>
                         </div>
 
@@ -354,5 +416,5 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
                 </div>
             </footer>
         </div>
-        );
+    );
 }
