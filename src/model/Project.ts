@@ -3,5 +3,6 @@ export interface Project {
     clientName: string;
     description: string;
     current: boolean;
-    location: string
+    location: string;
+    createdTime: string;
 }

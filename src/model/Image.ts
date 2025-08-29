@@ -3,5 +3,6 @@ export interface Image {
     refId: string;
     name: string | undefined | null;
     description: string | undefined | null;
-    image: string
+    image: string;
+    createdTime: string;
 }

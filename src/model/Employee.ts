@@ -3,5 +3,6 @@ export interface Employee {
     firstName: string;
     lastName: string;
     email: string | undefined;
-    dob: string
+    dob: string;
+    createdTime: string;
 }
