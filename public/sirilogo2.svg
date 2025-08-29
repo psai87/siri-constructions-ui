@@ -1,0 +1,14 @@
+<svg width="240" height="40" viewBox="0 0 240 40" xmlns="http://www.w3.org/2000/svg" fill="none" class="font-inter">
+    <style>
+        .cls-1 { font-family: 'Oswald', sans-serif; font-weight: 700; }
+        .cls-2 { font-family: 'Inter', sans-serif; font-weight: 400; }
+    </style>
+    <!-- Symbol: Geometric 'S' made from stacked blocks -->
+    <rect x="2" y="5" width="16" height="6" fill="#1f2937"/>
+    <rect x="10" y="13" width="16" height="6" fill="#ea580c"/>
+    <rect x="2" y="21" width="16" height="6" fill="#1f2937"/>
+
+    <!-- Text "Siri Constructions" -->
+    <text x="35" y="27" class="cls-1" fill="#1f2937" font-size="24">Siri</text>
+    <text x="80" y="27" class="cls-2" fill="#4b5563" font-size="24">Constructions</text>
+</svg>

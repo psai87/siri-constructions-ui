@@ -161,7 +161,7 @@ export default function Navbar({setAlerts}: AlertsProps) {
                         </div>
 
                         <div className="avatar min-w-60 w-60 h-10">
-                            <img src="/siri-constructions-ui/sirilogo.svg" alt="logo"/>
+                            <img src="/siri-constructions-ui/sirilogo2.svg" alt="logo"/>
                         </div>
 
 
