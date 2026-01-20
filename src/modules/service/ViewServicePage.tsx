@@ -99,7 +99,7 @@ export default function ViewServicePage({ setAlerts }: AlertsProps) {
                                             <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">{service.name}</h3>
                                             <div className="h-0.5 w-12 bg-orange-200 group-hover:w-full transition-all duration-500"></div>
                                         </div>
-                                        <p className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3 flex-1">{service.description}</p>
+                                        <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-1">{service.description}</p>
                                     </div>
                                 </div>
                             ))}
