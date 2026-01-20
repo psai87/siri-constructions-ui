@@ -1,14 +1,14 @@
-import {Link} from "react-router-dom";
-import type {Menu} from "../model/Menu.ts";
-import {type JSX, useState} from "react";
-import {AuthState} from "../model/Constants.ts";
-import {authenticateClient} from "../client/AuthenticateClient.ts";
-import type {AlertsProps} from "../model/Props.ts";
+import { Link } from "react-router-dom";
+import type { Menu } from "../model/Menu.ts";
+import { type JSX, useState } from "react";
+import { AuthState } from "../model/Constants.ts";
+import { authenticateClient } from "../client/AuthenticateClient.ts";
+import type { AlertsProps } from "../model/Props.ts";
 
 const navItems: Menu[] = [
-    {name: "About", path: "/"} as Menu,
-    {name: "Contact", path: "/contact"} as Menu,
-    {name: "Services", path: "/services"} as Menu,
+    { name: "About", path: "/" } as Menu,
+    { name: "Contact", path: "/contact" } as Menu,
+    { name: "Services", path: "/services" } as Menu,
     {
         name: "Projects",
         path: "/projects",
@@ -16,7 +16,7 @@ const navItems: Menu[] = [
     {
         name: "Admin",
         submenu: [
-            {name: "Login"}
+            { name: "Login" }
         ] as Menu[],
     } as Menu,
 ];
@@ -64,58 +64,73 @@ const handleLinkClick = () => {
 };
 
 
-export default function Navbar({setAlerts}: AlertsProps) {
+export default function Navbar({ setAlerts }: AlertsProps) {
 
-    const [authenticated, setAuthenticated] = useState<boolean>(false);
+    const [authenticated, setAuthenticated] = useState<boolean>(!!AuthState.token);
+    const [email, setEmail] = useState<string>("");
+    const [otp, setOtp] = useState<string>("");
     const navAdminItems: Menu[] = authenticated ? navItems.slice(0, -1)
         .concat({
             name: "Admin",
             submenu: [
-                {name: "Login"},
+                { name: "Login" },
                 {
                     name: "Services",
-                    submenu: [{name: "Edit Service", path: "/services/edit"}] as Menu[],
+                    submenu: [{ name: "Edit Service", path: "/services/edit" }] as Menu[],
                 } as Menu,
                 {
                     name: "Projects",
-                    submenu: [{name: "Edit Project", path: "/projects/edit"}] as Menu[],
-                } as Menu,
-                {
-                    name: "Employees",
-                    submenu: [{name: "View Employee", path: "/employees"}, {
-                        name: "Edit Employee",
-                        path: "/employees/edit"
-                    }] as Menu[],
-                } as Menu,
-                {
-                    name: "Timesheets",
-                    submenu: [{name: "Edit Timesheet", path: "/timesheets/edit"}] as Menu[],
+                    submenu: [{ name: "Edit Project", path: "/projects/edit" }] as Menu[],
                 } as Menu
             ] as Menu[],
         } as Menu) : navItems;
 
-    function handleTokenChange(value: string) {
-        AuthState.token = value;
+    function handleGenerateOtp() {
+        if (!email) {
+            showAlert("error", "Please enter your email");
+            return;
+        }
+        authenticateClient.generateOtp(email)
+            .then(() => {
+                console.log("OTP Generated Successfully");
+                showAlert("success", "OTP sent to your email");
+            })
+            .catch(err => {
+                console.log(err);
+                showAlert("error", "Failed to generate OTP");
+            });
     }
 
     function handleAuthenticate() {
-        authenticateClient.authenticate()
-            .then(() => {
-                console.log("Authentication Successful")
-                setAuthenticated(true);
-                showAlert("success", "Authentication Successful");
-                (document.getElementById('login_modal') as HTMLDialogElement)?.close();
+        if (!email || !otp) {
+            showAlert("error", "Please enter email and OTP");
+            return;
+        }
+        authenticateClient.validateOtp(email, otp)
+            .then((response) => {
+                if (response.token) {
+                    console.log("Authentication Successful");
+                    setAuthenticated(true);
+                    AuthState.token = response.token;
+                    showAlert("success", "Authentication Successful");
+                    (document.getElementById('login_modal') as HTMLDialogElement)?.close();
+                    // Reset state
+                    setEmail("");
+                    setOtp("");
+                } else {
+                    showAlert("error", "Authentication Failed");
+                }
             })
             .catch(err => {
                 setAuthenticated(false);
-                console.log(err)
+                console.log(err);
                 showAlert("error", "Authentication Failed");
             });
     }
 
     const showAlert = (type: "success" | "error", message: string) => {
         const id = Date.now();
-        setAlerts((prev) => [...prev, {id, type, message}]);
+        setAlerts((prev) => [...prev, { id, type, message }]);
     };
 
     return (
@@ -135,7 +150,7 @@ export default function Navbar({setAlerts}: AlertsProps) {
                     `}
             </style>
             <div className="drawer">
-                <input id="my-drawer-3" type="checkbox" className="drawer-toggle"/>
+                <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content flex flex-col">
 
                     <div
@@ -161,7 +176,7 @@ export default function Navbar({setAlerts}: AlertsProps) {
                         </div>
 
                         <div className="avatar min-w-60 w-60 h-10">
-                            <img src="/siri-constructions-ui/sirilogo2.svg" alt="logo"/>
+                            <img src="/siri-constructions-ui/sirilogo2.svg" alt="logo" />
                         </div>
 
 
@@ -235,16 +250,33 @@ export default function Navbar({setAlerts}: AlertsProps) {
                         </h1>
                         <div className="mb-4">
                             <input
-                                type="password"
-                                placeholder="Enter password..."
-                                onChange={(e) => handleTokenChange(e.target.value)}
+                                type="email"
+                                placeholder="Enter email..."
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
                             />
                         </div>
-                        <div className="mt-6">
+                        <div className="mb-4">
+                            <input
+                                type="text"
+                                placeholder="Enter OTP..."
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
+                            />
+                        </div>
+
+                        <div className="mt-6 flex gap-4">
+                            <button
+                                onClick={handleGenerateOtp}
+                                className="flex-1 py-3 text-lg font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
+                            >
+                                Generate OTP
+                            </button>
                             <button
                                 onClick={handleAuthenticate}
-                                className="w-full py-3 text-lg font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
+                                className="flex-1 py-3 text-lg font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
                             >
                                 Authenticate
                             </button>

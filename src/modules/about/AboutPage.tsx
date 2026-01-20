@@ -1,8 +1,8 @@
-import {Link} from "react-router-dom";
-import {useRef} from "react";
+import { Link } from "react-router-dom";
+import { useRef } from "react";
 
 export default function AboutPage() {
-    const middleSectionRef =  useRef<HTMLDivElement | null>(null);
+    const middleSectionRef = useRef<HTMLDivElement | null>(null);
 
     return (
         <div className="antialiased font-inter">
@@ -23,10 +23,10 @@ export default function AboutPage() {
 
             {/* Hero Section */}
             <header id="home"
-                    className="relative h-[60vh] md:h-[80vh] flex items-center justify-center text-white text-center px-4">
+                className="relative h-[60vh] md:h-[80vh] flex items-center justify-center text-white text-center px-4">
                 <div className="absolute inset-0 bg-black/60 z-10"></div>
-                <img src="https://placehold.co/1920x1080/2C3E50/FFFFFF?text=Building+Excellence"
-                     alt="Modern construction site" className="absolute inset-0 w-full h-full object-cover"/>
+                <img src="/siri-constructions-ui/hero_construction.png"
+                    alt="Modern construction site" className="absolute inset-0 w-full h-full object-cover" />
                 <div className="relative z-20 max-w-4xl">
                     <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg text-orange-500">Building the
                         Future, Restoring the Past</h1>
@@ -39,7 +39,7 @@ export default function AboutPage() {
                             middleSectionRef.current.scrollIntoView({ behavior: 'smooth' });
                         }
                     }}
-                          className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 text-lg">
+                        className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 text-lg">
                         Discover More
                     </Link>
                 </div>
@@ -48,7 +48,7 @@ export default function AboutPage() {
             <main className="container mx-auto px-6 py-12">
                 {/* About Us Section */}
                 <section id="about" ref={middleSectionRef}
-                         className="bg-white rounded-xl shadow-lg p-8 md:p-12 max-w-5xl mx-auto my-16 scroll-mt-20">
+                    className="bg-white rounded-xl shadow-lg p-8 md:p-12 max-w-5xl mx-auto my-16 scroll-mt-20">
                     <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800 text-center">About Siri
                         Constructions</h2>
                     <p className="text-lg mb-6 leading-relaxed text-gray-700">
@@ -115,24 +115,24 @@ export default function AboutPage() {
                             <div className="space-y-4 text-lg">
                                 <div className="flex items-center"><span
                                     className="text-orange-500 mr-4 text-2xl">🗓️</span><strong
-                                    className="text-gray-800 w-32 inline-block">Established:</strong> 1992
+                                        className="text-gray-800 w-32 inline-block">Established:</strong> 1992
                                 </div>
                                 <div className="flex items-center"><span
                                     className="text-orange-500 mr-4 text-2xl">👷</span><strong
-                                    className="text-gray-800 w-32 inline-block">Proprietor:</strong> Mr. S. Venkateswara
+                                        className="text-gray-800 w-32 inline-block">Proprietor:</strong> Mr. S. Venkateswara
                                     Rao
                                 </div>
                                 <div className="flex items-center"><span
                                     className="text-orange-500 mr-4 text-2xl">🏢</span><strong
-                                    className="text-gray-800 w-32 inline-block">Business Type:</strong> Proprietary
+                                        className="text-gray-800 w-32 inline-block">Business Type:</strong> Proprietary
                                 </div>
                                 <div className="flex items-center"><span
                                     className="text-orange-500 mr-4 text-2xl">📍</span><strong
-                                    className="text-gray-800 w-32 inline-block">Headquarters:</strong> Visakhapatnam, AP
+                                        className="text-gray-800 w-32 inline-block">Headquarters:</strong> Visakhapatnam, AP
                                 </div>
                                 <div className="flex items-center"><span
                                     className="text-orange-500 mr-4 text-2xl">💪</span><strong
-                                    className="text-gray-800 w-32 inline-block">Team Strength:</strong> 105 on-roll, 20
+                                        className="text-gray-800 w-32 inline-block">Team Strength:</strong> 105 on-roll, 20
                                     outsourced, with day-to-day manpower as per project scale.
                                 </div>
                             </div>
