@@ -80,7 +80,7 @@ export default function ViewProjectPage({ setAlerts }: AlertsProps) {
                 `}
             </style>
 
-            <main className="container mx-auto px-4 md:px-6 py-16">
+            <main className="max-w-7xl mx-auto px-4 md:px-8 py-10 pt-24 md:pt-32">
                 {/* Header */}
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Our <span className="text-orange-600">Projects</span></h1>

@@ -1,10 +1,10 @@
-import {type ChangeEvent, useEffect, useState} from "react";
-import type {AvailableService} from "../../model/Service.ts";
-import type {Image} from "../../model/Image.ts";
-import {availableServiceClient} from "../../client/AvailableServiceClient.ts";
-import {imageClient} from "../../client/ImageClient.ts";
-import {imageUtil} from "../../common/ImageUtil.ts";
-import type {AlertsProps} from "../../model/Props.ts";
+import { type ChangeEvent, useEffect, useState } from "react";
+import type { AvailableService } from "../../model/Service.ts";
+import type { Image } from "../../model/Image.ts";
+import { availableServiceClient } from "../../client/AvailableServiceClient.ts";
+import { imageClient } from "../../client/ImageClient.ts";
+import { imageUtil } from "../../common/ImageUtil.ts";
+import type { AlertsProps } from "../../model/Props.ts";
 import ImagePreview from "../ImagePreview.tsx";
 
 const defaultService = (uuid: string): AvailableService => {
@@ -26,7 +26,7 @@ const defaultImage = (uuid: string, defaultService: AvailableService): Image => 
     }
 }
 
-export default function EditServicePage({setAlerts}: AlertsProps) {
+export default function EditServicePage({ setAlerts }: AlertsProps) {
 
     const [service, setService] = useState<AvailableService[]>([]);
     const [serviceForm, setServiceForm] = useState<AvailableService>(defaultService(crypto.randomUUID()));
@@ -57,7 +57,7 @@ export default function EditServicePage({setAlerts}: AlertsProps) {
 
     const showAlert = (type: "success" | "error", message: string) => {
         const id = Date.now();
-        setAlerts((prev) => [...prev, {id, type, message}]);
+        setAlerts((prev) => [...prev, { id, type, message }]);
     };
 
     const handleSelectService = (selectedValue: string) => {
@@ -81,10 +81,10 @@ export default function EditServicePage({setAlerts}: AlertsProps) {
     };
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         console.log("name", name);
         console.log("value", value);
-        setServiceForm({...serviceForm, [name]: value});
+        setServiceForm({ ...serviceForm, [name]: value });
     };
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -92,7 +92,7 @@ export default function EditServicePage({setAlerts}: AlertsProps) {
             const file: File = e.target.files[0];
             file.arrayBuffer()
                 .then(data => {
-                    setImageForm({...imageForm, image: imageUtil.arrayBufferToBase64(data)})
+                    setImageForm({ ...imageForm, image: imageUtil.arrayBufferToBase64(data) })
                 });
         }
     };
@@ -168,7 +168,7 @@ export default function EditServicePage({setAlerts}: AlertsProps) {
         `}
             </style>
 
-            <main className="flex items-center justify-center py-25 px-6">
+            <main className="flex items-center justify-center pt-24 md:pt-32 pb-16 px-6">
                 <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col md:flex-row gap-8">
                     <div className="flex-1 flex flex-col gap-6">
                         <h1 className="text-3xl font-bold text-gray-800 text-center md:text-left mb-2">
@@ -266,5 +266,5 @@ export default function EditServicePage({setAlerts}: AlertsProps) {
                 </div>
             </footer>
         </div>
-         );
+    );
 }

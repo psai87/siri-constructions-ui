@@ -1,14 +1,14 @@
-import {type ChangeEvent, useEffect, useState} from "react";
-import type {Image} from "../../model/Image.ts";
-import {imageClient} from "../../client/ImageClient.ts";
-import type {AlertsProps} from "../../model/Props.ts";
-import type {Project} from "../../model/Project.ts";
-import {projectClient} from "../../client/ProjectClient.ts";
-import {imageUtil} from "../../common/ImageUtil.ts";
+import { type ChangeEvent, useEffect, useState } from "react";
+import type { Image } from "../../model/Image.ts";
+import { imageClient } from "../../client/ImageClient.ts";
+import type { AlertsProps } from "../../model/Props.ts";
+import type { Project } from "../../model/Project.ts";
+import { projectClient } from "../../client/ProjectClient.ts";
+import { imageUtil } from "../../common/ImageUtil.ts";
 import ImagePreview from "../ImagePreview.tsx";
-import {TrashIcon} from "@heroicons/react/24/outline";
-import {EditIcon} from "lucide-react";
-import {Select} from "@mantine/core";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { EditIcon } from "lucide-react";
+import { Select } from "@mantine/core";
 
 const defaultProject = (uuid: string): Project => {
     return {
@@ -30,7 +30,7 @@ const defaultImage = (uuid: string, defaultProject: Project): Image => {
     }
 }
 
-export default function EditProjectPage({setAlerts}: AlertsProps) {
+export default function EditProjectPage({ setAlerts }: AlertsProps) {
 
     const [projects, setProjects] = useState<Project[]>([]);
     const [projectForm, setProjectForm] = useState<Project>(defaultProject(crypto.randomUUID()));
@@ -68,7 +68,7 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
 
     const showAlert = (type: "success" | "error", message: string) => {
         const id = Date.now();
-        setAlerts((prev) => [...prev, {id, type, message}]);
+        setAlerts((prev) => [...prev, { id, type, message }]);
     };
 
     const handleSelectService = (selectedValue: string) => {
@@ -92,12 +92,12 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
     };
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {name, value} = e.target;
-        setProjectForm({...projectForm, [name]: value});
+        const { name, value } = e.target;
+        setProjectForm({ ...projectForm, [name]: value });
     };
 
     const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setProjectForm({...projectForm, ["current"]: e.target.checked});
+        setProjectForm({ ...projectForm, ["current"]: e.target.checked });
     };
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -105,14 +105,14 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
             const file: File = e.target.files[0];
             file.arrayBuffer()
                 .then(data => {
-                    setSelectedImageForm({...selectedImageForm, image: imageUtil.arrayBufferToBase64(data)})
+                    setSelectedImageForm({ ...selectedImageForm, image: imageUtil.arrayBufferToBase64(data) })
                 });
         }
     };
 
     const handleAddImageTextChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {name, value} = e.target;
-        setSelectedImageForm({...selectedImageForm, [name]: value});
+        const { name, value } = e.target;
+        setSelectedImageForm({ ...selectedImageForm, [name]: value });
     };
 
     const handleAddImageButton = () => {
@@ -240,7 +240,7 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
           }
         `}
             </style>
-            <main className="flex items-center justify-center py-25 px-6">
+            <main className="flex items-center justify-center pt-24 md:pt-32 pb-16 px-6">
                 <div
                     className="w-full max-w-7xl bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-12 flex flex-col lg:flex-row gap-8">
                     <div className="flex-1 flex flex-col gap-6 w-full">
@@ -254,8 +254,8 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
                             <Select
                                 placeholder="Choose one"
                                 data={projects.map(data => {
-                                    return {"value": data.id, "label": data.clientName}
-                                }).concat({"value": "", "label": "-- None selected --"})}
+                                    return { "value": data.id, "label": data.clientName }
+                                }).concat({ "value": "", "label": "-- None selected --" })}
                                 value={selectedProject?.id || ""}
                                 onChange={(data) => handleSelectService(data ?? "")}
                                 classNames={{
@@ -288,7 +288,7 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
                                         fontSize: '1.125rem',
                                     },
                                     // Each option row
-                                    option: {padding: '0.4rem 1rem',fontSize: '1rem'},
+                                    option: { padding: '0.4rem 1rem', fontSize: '1rem' },
                                 }}
                             />
                         </div>
@@ -401,8 +401,8 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
                                 </button>
                                 <span
                                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 border-x border-gray-300">
-                  Pages {imageForms.length === 0 ? 0 : pageIndex + 1}/{imageForms.length}
-                </span>
+                                    Pages {imageForms.length === 0 ? 0 : pageIndex + 1}/{imageForms.length}
+                                </span>
                                 <button
                                     className="px-4 py-2 text-sm font-medium text-gray-800 bg-gray-200 rounded-r-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                     onClick={handlePageRight}
@@ -416,21 +416,21 @@ export default function EditProjectPage({setAlerts}: AlertsProps) {
                                     disabled={imageForms.length <= 0}
                                     onClick={handleEditImageButton}
                                 >
-                                    <EditIcon className="h-5 w-5"/>
+                                    <EditIcon className="h-5 w-5" />
                                 </button>
                                 <button
                                     className="p-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                     disabled={imageForms.length <= 0}
                                     onClick={handleDeleteImageButton}
                                 >
-                                    <TrashIcon className="h-5 w-5"/>
+                                    <TrashIcon className="h-5 w-5" />
                                 </button>
                             </div>
                         </div>
 
                         <div
                             className="w-full h-96 flex flex-col items-center justify-center bg-white rounded-lg shadow-md border-2 border-gray-300 p-2">
-                            <ImagePreview image={imageForms[pageIndex]}/>
+                            <ImagePreview image={imageForms[pageIndex]} />
                         </div>
 
                         <div className="text-center">
