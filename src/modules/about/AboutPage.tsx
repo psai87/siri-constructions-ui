@@ -138,6 +138,7 @@ export default function AboutPage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {/* Core Services Cards */}
                         {[
                             { title: "HVAC Systems", desc: "Supply, installation, testing, and commissioning for optimal climate control.", icon: "❄️" },
                             { title: "Electrical & Instrumentation", desc: "Comprehensive systems for power distribution and process control.", icon: "⚡" },
@@ -147,12 +148,18 @@ export default function AboutPage() {
                             { title: "Operation & Maintenance", desc: "Annual O&M services for utility equipment and facilities.", icon: "🛠️" }
                         ].map((service, idx) => (
                             <div key={idx}
-                                className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 hover:border-orange-200">
-                                <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-50 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                                className="group bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 hover:border-orange-200 flex items-start gap-5">
+                                <div className="flex-shrink-0 w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-orange-100 to-orange-50 rounded-2xl flex items-center justify-center text-2xl md:text-3xl shadow-sm group-hover:scale-110 transition-transform duration-300">
                                     {service.icon}
                                 </div>
-                                <h3 className="text-2xl font-bold mb-3 text-gray-800 group-hover:text-orange-600 transition-colors">{service.title}</h3>
-                                <p className="text-gray-600 leading-relaxed font-light">{service.desc}</p>
+                                <div className="flex-1">
+                                    <h3 className="text-xl md:text-2xl font-bold mb-2 text-gray-800 group-hover:text-orange-600 transition-colors uppercase tracking-tight">
+                                        {service.title}
+                                    </h3>
+                                    <p className="text-gray-600 leading-relaxed font-light text-sm md:text-base">
+                                        {service.desc}
+                                    </p>
+                                </div>
                             </div>
                         ))}
                     </div>

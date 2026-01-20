@@ -21,6 +21,10 @@ const navItems: Menu[] = [
 
 
 export default function Navbar({ setAlerts, alerts }: AlertsProps) {
+    const closeDrawer = () => {
+        const drawer = document.getElementById('my-drawer-3') as HTMLInputElement;
+        if (drawer) drawer.checked = false;
+    };
 
     const [authenticated, setAuthenticated] = useState<boolean>(!!AuthState.token);
     const [email, setEmail] = useState<string>("");
@@ -250,11 +254,8 @@ export default function Navbar({ setAlerts, alerts }: AlertsProps) {
                 <div className="drawer-side z-50">
                     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay bg-black/40 backdrop-blur-sm"></label>
                     <ul className="menu p-4 w-80 min-h-full bg-white/90 backdrop-blur-2xl text-gray-800 relative border-r border-white/20">
-                        <div className="absolute top-0 right-0 p-4">
-                            <label htmlFor="my-drawer-3" aria-label="open sidebar"
-                                className="btn btn-circle btn-ghost text-gray-400 hover:text-orange-600 hover:bg-orange-50">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                            </label>
+                        <div className="absolute top-0 right-0 p-4 lg:hidden">
+                            {/* The cross icon is removed as per user request */}
                         </div>
 
 
@@ -275,7 +276,9 @@ export default function Navbar({ setAlerts, alerts }: AlertsProps) {
                                         </button>
                                     </div>
                                 ) : !item.submenu ? (
-                                    <Link to={item.path!} className="py-3 px-4 text-lg font-semibold text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-2xl active:bg-orange-100 transition-colors">
+                                    <Link to={item.path!}
+                                        onClick={closeDrawer}
+                                        className="py-3 px-4 text-lg font-semibold text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-2xl active:bg-orange-100 transition-colors">
                                         {item.name}
                                     </Link>
                                 ) : (
@@ -284,7 +287,9 @@ export default function Navbar({ setAlerts, alerts }: AlertsProps) {
                                         <ul className="bg-gray-50/50 rounded-2xl mt-1">
                                             {item.submenu.map((subItem) => (
                                                 <li key={subItem.name}>
-                                                    <Link to={subItem.path || "#"} className="py-2.5 pl-8 text-gray-500 hover:text-orange-600 hover:bg-transparent font-medium">
+                                                    <Link to={subItem.path || "#"}
+                                                        onClick={closeDrawer}
+                                                        className="py-2.5 pl-8 text-gray-500 hover:text-orange-600 hover:bg-transparent font-medium">
                                                         {subItem.name}
                                                     </Link>
                                                 </li>

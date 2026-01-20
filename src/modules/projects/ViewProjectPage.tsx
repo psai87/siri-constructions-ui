@@ -91,7 +91,7 @@ export default function ViewProjectPage({ setAlerts }: AlertsProps) {
                 </div>
 
                 {/* Filter Tabs */}
-                <div className="flex justify-center mb-10 gap-2">
+                <div className="flex justify-center flex-wrap mb-10 gap-2">
                     {(['all', 'current', 'completed'] as const).map((f) => (
                         <button
                             key={f}
@@ -123,17 +123,17 @@ export default function ViewProjectPage({ setAlerts }: AlertsProps) {
                                 {/* Card Header - Always Visible */}
                                 <button
                                     onClick={() => handleProjectClick(project)}
-                                    className="w-full p-6 text-left hover:bg-gray-50 transition-colors"
+                                    className="w-full p-4 md:p-6 text-left hover:bg-gray-50 transition-colors"
                                 >
                                     <div className="space-y-3">
                                         {/* Title row with badge and icon */}
-                                        <div className="flex items-start justify-between gap-4">
-                                            <h3 className={`text-2xl font-bold transition-colors flex-1 ${isExpanded ? "text-orange-600" : "text-gray-800"
+                                        <div className="flex items-start justify-between gap-3 md:gap-4">
+                                            <h3 className={`text-xl md:text-2xl font-bold transition-colors flex-1 min-w-0 ${isExpanded ? "text-orange-600" : "text-gray-800"
                                                 }`}>
                                                 {project.clientName}
                                             </h3>
 
-                                            <div className="flex items-start gap-3 flex-shrink-0">
+                                            <div className="flex items-start gap-2 md:gap-3 flex-shrink-0">
                                                 <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase whitespace-nowrap ${project.current
                                                     ? "bg-green-100 text-green-700 border border-green-200"
                                                     : "bg-blue-100 text-blue-700 border border-blue-200"
@@ -158,7 +158,7 @@ export default function ViewProjectPage({ setAlerts }: AlertsProps) {
 
                                 {/* Expanded Content */}
                                 {isExpanded && (
-                                    <div className="border-t border-gray-100 bg-gray-50 p-6 animate-fade-in-up">
+                                    <div className="border-t border-gray-100 bg-gray-50 p-4 md:p-6 animate-fade-in-up">
                                         {images.get(project.id) && images.get(project.id)!.length > 0 ? (
                                             <div className="space-y-6">
                                                 {/* Main Image */}
