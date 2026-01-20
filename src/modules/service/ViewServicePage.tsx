@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import type { AvailableService } from "../../model/Service.ts";
 import { availableServiceClient } from "../../client/AvailableServiceClient.ts";
 import ImagePreview from "../ImagePreview.tsx";
@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 export default function ViewServicePage({ setAlerts }: AlertsProps) {
     const [services, setServices] = useState<AvailableService[]>([]);
     const [images, setImages] = useState<Map<string, Image>>(new Map());
-    const servicesRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         availableServiceClient.getAvailableService()
@@ -73,37 +72,35 @@ export default function ViewServicePage({ setAlerts }: AlertsProps) {
             </style>
 
             <main className="container mx-auto px-4 md:px-6 py-16 relative z-20">
-                <section id="services-gallery" ref={servicesRef} className="scroll-mt-24">
-                    <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-100">
-                        <div className="text-center mb-16">
-                            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Our <span className="text-orange-600">Services</span></h2>
-                            <div className="h-1 w-24 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full"></div>
-                            <p className="text-lg text-gray-600 mt-6 max-w-3xl mx-auto">
-                                We offer a wide range of specialized construction and maintenance services designed to meet the highest industry standards.
-                            </p>
-                        </div>
+                <section id="services-gallery" className="scroll-mt-24">
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Our <span className="text-orange-600">Services</span></h2>
+                        <div className="h-1 w-24 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full"></div>
+                        <p className="text-lg text-gray-600 mt-6 max-w-3xl mx-auto">
+                            We provide comprehensive MEP and structural engineering solutions for diverse industrial and commercial projects.
+                        </p>
+                    </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                            {services.map((service) => (
-                                <div
-                                    key={service.id}
-                                    className="group bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-orange-200 flex flex-col h-full"
-                                >
-                                    <figure className="w-full h-56 flex items-center justify-center overflow-hidden bg-gray-100 relative">
-                                        <div className="transform transition-transform duration-500 group-hover:scale-110 w-full h-full flex items-center justify-center">
-                                            <ImagePreview image={images.get(service.id)} />
-                                        </div>
-                                    </figure>
-                                    <div className="p-6 flex-1 flex flex-col relative z-20">
-                                        <div className="mb-4">
-                                            <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">{service.name}</h3>
-                                            <div className="h-0.5 w-12 bg-orange-200 group-hover:w-full transition-all duration-500"></div>
-                                        </div>
-                                        <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-1">{service.description}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        {services.map((service) => (
+                            <div
+                                key={service.id}
+                                className="group bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-orange-200 flex flex-col h-full"
+                            >
+                                <figure className="w-full h-56 flex items-center justify-center overflow-hidden bg-gray-100 relative">
+                                    <div className="transform transition-transform duration-500 group-hover:scale-110 w-full h-full flex items-center justify-center">
+                                        <ImagePreview image={images.get(service.id)} />
                                     </div>
+                                </figure>
+                                <div className="p-6 flex-1 flex flex-col relative z-20">
+                                    <div className="mb-4">
+                                        <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">{service.name}</h3>
+                                        <div className="h-0.5 w-12 bg-orange-200 group-hover:w-full transition-all duration-500"></div>
+                                    </div>
+                                    <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-1">{service.description}</p>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
                 </section>
 
@@ -139,6 +136,6 @@ export default function ViewServicePage({ setAlerts }: AlertsProps) {
                     <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} Siri Constructions. All Rights Reserved.</p>
                 </div>
             </footer>
-        </div>
+        </div >
     );
 }

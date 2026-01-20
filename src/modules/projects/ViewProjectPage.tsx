@@ -1,236 +1,273 @@
-import {useEffect, useState} from "react";
-import type {Image} from "../../model/Image.ts";
-import type {Project} from "../../model/Project.ts";
-import {projectClient} from "../../client/ProjectClient.ts";
-import type {AlertsProps} from "../../model/Props.ts";
-import {imageClient} from "../../client/ImageClient.ts";
+import { useEffect, useState } from "react";
+import type { Image } from "../../model/Image.ts";
+import type { Project } from "../../model/Project.ts";
+import { projectClient } from "../../client/ProjectClient.ts";
+import type { AlertsProps } from "../../model/Props.ts";
+import { imageClient } from "../../client/ImageClient.ts";
 import ImagePreview from "../ImagePreview.tsx";
 
-export default function ViewProjectPage({setAlerts}: AlertsProps) {
+export default function ViewProjectPage({ setAlerts }: AlertsProps) {
     const [projects, setProjects] = useState<Project[]>([]);
-    const [projectsFilter, setProjectsFilter] = useState<Project[]>([]);
-    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const [filter, setFilter] = useState<'all' | 'current' | 'completed'>('all');
     const [images, setImages] = useState<Map<string, Image[]>>(new Map());
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [pageIndex, setPageIndex] = useState<number>(0);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     useEffect(() => {
         projectClient.getProjects()
             .then(response => {
                 setProjects(response);
-                setProjectsFilter(response);
                 console.log("Projects loaded");
             })
             .catch(error => {
                 console.log(error)
-                showAlert("error", error.message)
+                if (error.message) showAlert("error", error.message)
             })
     }, []);
 
     const showAlert = (type: "success" | "error", message: string) => {
         const id = Date.now();
-        setAlerts((prev) => [...prev, {id, type, message}]);
+        setAlerts((prev) => [...prev, { id, type, message }]);
     };
 
-    const handleOnProjectClick = (project: Project) => {
-        setSelectedProject(project)
-        if (!images.get(project.id)) {
-            imageClient.getImages([project.id])
-                .then(response =>
-                    setImages(oldMap => new Map(oldMap).set(project.id, response)))
-                .catch(error => {
-                    console.log(error)
-                    showAlert("error", error.message)
-                });
+    const handleProjectClick = (project: Project) => {
+        if (selectedProject?.id === project.id) {
+            setSelectedProject(null);
+        } else {
+            setSelectedProject(project);
+            setPageIndex(0);
+            if (!images.get(project.id)) {
+                imageClient.getImages([project.id])
+                    .then(response => {
+                        setImages(oldMap => new Map(oldMap).set(project.id, response));
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        if (error.message) showAlert("error", error.message);
+                    });
+            }
         }
+    };
 
-    }
+    const handlePageLeft = () => {
+        setPageIndex((index) => Math.max(0, index - 1));
+    };
 
-    function handlePageLeft() {
-        setPageIndex((index) => {
-            return Math.max(0, index - 1);
-        });
-    }
-
-    function handlePageRight() {
+    const handlePageRight = () => {
         setPageIndex((index) => {
             return selectedProject?.id
-                ? Math.min(
-                    (images.get(selectedProject.id)?.length ?? 0) - 1,
-                    index + 1
-                ) : 0;
+                ? Math.min((images.get(selectedProject.id)?.length ?? 0) - 1, index + 1)
+                : 0;
         });
-    }
+    };
 
-    const handleAllClicked = () => {
-       setIsDropdownOpen(false);
-        setProjectsFilter(projects);
-    }
-
-    const handleCurrentClicked = () => {
-        setIsDropdownOpen(false);
-        setProjectsFilter(projects.filter(data => data.current));
-    }
-
-    const handleCompletedClicked = () => {
-        setIsDropdownOpen(false);
-        setProjectsFilter(projects.filter(data => !data.current));
-    }
+    const filteredProjects = projects.filter(project => {
+        if (filter === 'all') return true;
+        if (filter === 'current') return project.current;
+        if (filter === 'completed') return !project.current;
+        return true;
+    });
 
     return (
-        <div className="antialiased font-inter bg-gray-50 min-h-screen">
+        <div className="antialiased min-h-screen bg-gray-50 font-outfit">
             <style>
                 {`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@500;700&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F4F6F8;
-            color: #1a202c;
-        }
-        h1, h2, h3, h4, .font-oswald {
-            font-family: 'Oswald', sans-serif;
-        }
-        `}
+                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+                
+                body {
+                    font-family: 'Outfit', sans-serif;
+                }
+                `}
             </style>
 
-            <main className="container mx-auto px-6 py-25">
-                <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center text-gray-800">
-                    Our Projects
-                </h1>
-                <p className="text-lg md:text-xl text-center text-gray-700 max-w-3xl mx-auto mb-12">
-                    Explore our portfolio of successful projects across various sectors,
-                    showcasing our expertise in MEP and structural engineering.
-                </p>
+            <main className="container mx-auto px-4 md:px-6 py-16">
+                {/* Header */}
+                <div className="text-center mb-12">
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Our <span className="text-orange-600">Projects</span></h1>
+                    <div className="h-1 w-24 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full"></div>
+                    <p className="text-lg text-gray-600 mt-6 max-w-3xl mx-auto">
+                        Explore our portfolio of successful projects across various sectors.
+                    </p>
+                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Project List Column */}
-                    <div
-                        className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 flex flex-col overflow-y-auto max-h-[80vh]">
-                        <div className="relative mb-6">
-                            <button
-                                className="w-full text-left text-2xl font-bold text-gray-800 px-4 py-2 flex justify-between items-center rounded-lg bg-gray-100 border border-gray-200"
-                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                {/* Filter Tabs */}
+                <div className="flex justify-center mb-10 gap-2">
+                    {(['all', 'current', 'completed'] as const).map((f) => (
+                        <button
+                            key={f}
+                            onClick={() => {
+                                setFilter(f);
+                                setSelectedProject(null);
+                            }}
+                            className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 capitalize ${filter === f
+                                ? "bg-orange-500 text-white shadow-lg shadow-orange-500/30"
+                                : "bg-white text-gray-600 hover:bg-orange-50 border border-gray-200"
+                                }`}
+                        >
+                            {f}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Project Cards - Single Column */}
+                <div className="max-w-5xl mx-auto space-y-6">
+                    {filteredProjects.map((project) => {
+                        const isExpanded = selectedProject?.id === project.id;
+
+                        return (
+                            <div
+                                key={project.id}
+                                className={`bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-500 ${isExpanded ? 'shadow-2xl border-orange-200' : 'hover:shadow-xl'
+                                    }`}
                             >
-                                Projects
-                                <svg
-                                    className={`w-5 h-5 ml-2 transform transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                                {/* Card Header - Always Visible */}
+                                <button
+                                    onClick={() => handleProjectClick(project)}
+                                    className="w-full p-6 text-left flex items-start justify-between gap-4 hover:bg-gray-50 transition-colors"
                                 >
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                          d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </button>
-                            {isDropdownOpen && (
-                                <ul className="absolute z-10 w-full mt-1 bg-white shadow-lg rounded-lg border border-gray-200 overflow-hidden">
-                                    <li>
-                                        <button onClick={handleAllClicked}
-                                                className="w-full text-left px-4 py-2 hover:bg-gray-100">All
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button onClick={handleCurrentClicked}
-                                                className="w-full text-left px-4 py-2 hover:bg-gray-100">Current
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button onClick={handleCompletedClicked}
-                                                className="w-full text-left px-4 py-2 hover:bg-gray-100">Completed
-                                        </button>
-                                    </li>
-                                </ul>
-                            )}
-                        </div>
-
-                        <ul className="space-y-4">
-                            {projectsFilter.map((project) => (
-                                <li
-                                    key={project.id}
-                                    className={`
-                    p-5 rounded-lg border-2 transition-all duration-200 ease-in-out cursor-pointer
-                    hover:bg-gray-50 hover:transform hover:shadow-md
-                    ${selectedProject?.id === project.id ? "bg-blue-50 border-blue-500 shadow-md scale-[1.02]" : "bg-white border-transparent"}
-                  `}
-                                    onClick={() => handleOnProjectClick(project)}
-                                >
-                                    <h3 className="text-lg font-semibold text-gray-800 mb-1">{project.clientName}</h3>
-                                    <p className="text-gray-600 text-sm line-clamp-2">{project.description}</p>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Project Details Column */}
-                    <section
-                        className="md:col-span-2 bg-white rounded-xl shadow-lg border border-gray-200 p-8 flex flex-col max-h-[80vh] overflow-y-auto">
-                        {selectedProject ? (
-                            <>
-                                <header className="mb-6">
-                                    <h2 className="text-2xl font-bold text-gray-800">{selectedProject.clientName}</h2>
-                                    <p className="text-gray-500 mt-1">{selectedProject.description}</p>
-                                </header>
-
-                                <div className="flex-1 flex flex-col lg:flex-row gap-6 items-start">
-                                    <div
-                                        className="w-full lg:w-1/2 flex justify-center items-center rounded-xl overflow-hidden shadow-inner">
-                                        <ImagePreview image={images.get(selectedProject?.id)?.[pageIndex]}/>
+                                    <div className="flex-1">
+                                        <div className="flex items-start gap-4">
+                                            <div className="flex-1">
+                                                <h3 className={`text-2xl font-bold mb-2 transition-colors ${isExpanded ? "text-orange-600" : "text-gray-800"
+                                                    }`}>
+                                                    {project.clientName}
+                                                </h3>
+                                                <p className="text-gray-600 leading-relaxed">{project.description}</p>
+                                            </div>
+                                            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase whitespace-nowrap ${project.current
+                                                ? "bg-green-100 text-green-700 border border-green-200"
+                                                : "bg-blue-100 text-blue-700 border border-blue-200"
+                                                }`}>
+                                                {project.current ? 'Current' : 'Completed'}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="w-full lg:w-1/2">
-                                        <p className="text-gray-600 text-base leading-relaxed">
-                                            {images.get(selectedProject?.id)?.[pageIndex]?.description || ""}
-                                        </p>
-                                    </div>
-                                </div>
 
-                                <footer className="mt-6 flex justify-center">
-                                    <div className="inline-flex rounded-lg shadow-sm overflow-hidden border">
-                                        <button
-                                            className="px-4 py-2 font-bold text-white bg-gray-800 hover:bg-gray-700 disabled:opacity-50"
-                                            onClick={handlePageLeft}
-                                            disabled={pageIndex === 0}
-                                        >
-                                            «
-                                        </button>
-                                        <span className="px-4 py-2 font-bold text-gray-800 bg-gray-100">
-                      {pageIndex + 1} / {images.get(selectedProject.id)?.length}
-                    </span>
-                                        <button
-                                            className="px-4 py-2 font-bold text-white bg-gray-800 hover:bg-gray-700 disabled:opacity-50"
-                                            onClick={handlePageRight}
-                                            disabled={pageIndex === (images.get(selectedProject?.id)?.length ?? pageIndex + 1) - 1}
-                                        >
-                                            »
-                                        </button>
+                                    {/* Expand/Collapse Icon */}
+                                    <div className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full transition-all ${isExpanded ? 'bg-orange-500 text-white rotate-180' : 'bg-gray-100 text-gray-600'
+                                        }`}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                        </svg>
                                     </div>
-                                </footer>
-                            </>
-                        ) : (
-                            <div className="flex flex-1 items-center justify-center">
-                                <div className="text-center text-gray-400">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="w-14 h-14 mx-auto mb-3 text-gray-300"
-                                    >
-                                        <path strokeLinecap="round" strokeLinejoin="round"
-                                              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"/>
-                                    </svg>
-                                    <p className="font-medium text-lg">Select a project to view details</p>
-                                </div>
+                                </button>
+
+                                {/* Expanded Content */}
+                                {isExpanded && (
+                                    <div className="border-t border-gray-100 bg-gray-50 p-6 animate-fade-in-up">
+                                        {images.get(project.id) && images.get(project.id)!.length > 0 ? (
+                                            <div className="space-y-6">
+                                                {/* Main Image */}
+                                                <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg">
+                                                    <div className="aspect-video flex items-center justify-center">
+                                                        <ImagePreview image={images.get(project.id)?.[pageIndex]} />
+                                                    </div>
+
+                                                    {/* Navigation Overlay */}
+                                                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-3 bg-black/70 backdrop-blur-sm rounded-full px-4 py-2">
+                                                        <button
+                                                            onClick={handlePageLeft}
+                                                            disabled={pageIndex === 0}
+                                                            className="w-10 h-10 flex items-center justify-center rounded-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white transition-all transform hover:scale-110 disabled:hover:scale-100"
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                                            </svg>
+                                                        </button>
+                                                        <span className="px-4 py-1 text-white font-semibold text-sm whitespace-nowrap">
+                                                            {pageIndex + 1} / {images.get(project.id)?.length || 0}
+                                                        </span>
+                                                        <button
+                                                            onClick={handlePageRight}
+                                                            disabled={pageIndex === (images.get(project.id)?.length ?? pageIndex + 1) - 1}
+                                                            className="w-10 h-10 flex items-center justify-center rounded-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white transition-all transform hover:scale-110 disabled:hover:scale-100"
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {/* Image Description */}
+                                                <div className="bg-white border-l-4 border-orange-500 rounded-lg p-6 shadow-sm">
+                                                    <h4 className="text-sm font-bold text-orange-900 uppercase tracking-wide mb-2">Image Description</h4>
+                                                    <p className="text-gray-700 leading-relaxed text-lg">
+                                                        {images.get(project.id)?.[pageIndex]?.description || "No description available for this image."}
+                                                    </p>
+                                                </div>
+
+                                                {/* Thumbnail Strip */}
+                                                {images.get(project.id)!.length > 1 && (
+                                                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                                                        <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">All Images ({images.get(project.id)!.length})</h4>
+                                                        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+                                                            {images.get(project.id)!.map((img, idx) => (
+                                                                <button
+                                                                    key={idx}
+                                                                    onClick={() => setPageIndex(idx)}
+                                                                    className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${idx === pageIndex
+                                                                        ? 'border-orange-500 ring-2 ring-orange-200 scale-105'
+                                                                        : 'border-gray-200 hover:border-orange-300 opacity-70 hover:opacity-100'
+                                                                        }`}
+                                                                >
+                                                                    <ImagePreview image={img} />
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ) : images.get(project.id) ? (
+                                            <div className="text-center py-12 bg-white rounded-lg">
+                                                <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                                <p className="text-gray-600 font-medium text-lg">No images available for this project</p>
+                                            </div>
+                                        ) : (
+                                            <div className="text-center py-12 bg-white rounded-lg">
+                                                <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4">
+                                                    <svg className="w-8 h-8 text-orange-500 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                    </svg>
+                                                </div>
+                                                <p className="text-gray-500 font-medium">Loading images...</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </section>
+                        );
+                    })}
+
+                    {filteredProjects.length === 0 && (
+                        <div className="text-center py-20 bg-white rounded-2xl shadow-lg">
+                            <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                            <p className="text-xl text-gray-600">No projects found in this category.</p>
+                        </div>
+                    )}
                 </div>
             </main>
 
-            <footer className="bg-gray-800 text-white py-8 text-center mt-12">
-                <div className="container mx-auto px-6">
-                    <p>&copy; 2024 Siri Constructions. All Rights Reserved.</p>
+            <footer className="bg-gray-900 text-white py-12 border-t border-gray-800 mt-20">
+                <div className="container mx-auto px-6 text-center">
+                    <div className="mb-8 font-bold text-2xl tracking-tight">
+                        <span className="text-orange-500">Siri</span> Constructions
+                    </div>
+                    <div className="flex justify-center space-x-8 mb-8 text-gray-400">
+                        {['About', 'Services', 'Projects', 'Contact'].map(link => (
+                            <span key={link} className="hover:text-orange-500 cursor-pointer transition-colors">{link}</span>
+                        ))}
+                    </div>
+                    <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} Siri Constructions. All Rights Reserved.</p>
                 </div>
             </footer>
         </div>
