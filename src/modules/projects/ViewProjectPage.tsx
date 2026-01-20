@@ -123,32 +123,36 @@ export default function ViewProjectPage({ setAlerts }: AlertsProps) {
                                 {/* Card Header - Always Visible */}
                                 <button
                                     onClick={() => handleProjectClick(project)}
-                                    className="w-full p-6 text-left flex items-start justify-between gap-4 hover:bg-gray-50 transition-colors"
+                                    className="w-full p-6 text-left hover:bg-gray-50 transition-colors"
                                 >
-                                    <div className="flex-1">
-                                        <div className="flex items-start gap-4">
-                                            <div className="flex-1">
-                                                <h3 className={`text-2xl font-bold mb-2 transition-colors ${isExpanded ? "text-orange-600" : "text-gray-800"
-                                                    }`}>
-                                                    {project.clientName}
-                                                </h3>
-                                                <p className="text-gray-600 leading-relaxed">{project.description}</p>
-                                            </div>
-                                            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase whitespace-nowrap ${project.current
-                                                ? "bg-green-100 text-green-700 border border-green-200"
-                                                : "bg-blue-100 text-blue-700 border border-blue-200"
+                                    <div className="space-y-3">
+                                        {/* Title row with badge and icon */}
+                                        <div className="flex items-start justify-between gap-4">
+                                            <h3 className={`text-2xl font-bold transition-colors flex-1 ${isExpanded ? "text-orange-600" : "text-gray-800"
                                                 }`}>
-                                                {project.current ? 'Current' : 'Completed'}
-                                            </span>
-                                        </div>
-                                    </div>
+                                                {project.clientName}
+                                            </h3>
 
-                                    {/* Expand/Collapse Icon */}
-                                    <div className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full transition-all ${isExpanded ? 'bg-orange-500 text-white rotate-180' : 'bg-gray-100 text-gray-600'
-                                        }`}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                        </svg>
+                                            <div className="flex items-start gap-3 flex-shrink-0">
+                                                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase whitespace-nowrap ${project.current
+                                                    ? "bg-green-100 text-green-700 border border-green-200"
+                                                    : "bg-blue-100 text-blue-700 border border-blue-200"
+                                                    }`}>
+                                                    {project.current ? 'Current' : 'Completed'}
+                                                </span>
+
+                                                {/* Expand/Collapse Icon */}
+                                                <div className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${isExpanded ? 'bg-orange-500 text-white rotate-180' : 'bg-gray-100 text-gray-600'
+                                                    }`}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Description row - full width */}
+                                        <p className="text-gray-600 leading-relaxed">{project.description}</p>
                                     </div>
                                 </button>
 
@@ -192,7 +196,7 @@ export default function ViewProjectPage({ setAlerts }: AlertsProps) {
                                                 {/* Image Description */}
                                                 <div className="bg-white border-l-4 border-orange-500 rounded-lg p-6 shadow-sm">
                                                     <h4 className="text-sm font-bold text-orange-900 uppercase tracking-wide mb-2">Image Description</h4>
-                                                    <p className="text-gray-700 leading-relaxed text-lg">
+                                                    <p className="text-gray-600 leading-relaxed">
                                                         {images.get(project.id)?.[pageIndex]?.description || "No description available for this image."}
                                                     </p>
                                                 </div>
