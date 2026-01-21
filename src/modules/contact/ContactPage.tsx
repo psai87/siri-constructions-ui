@@ -154,11 +154,6 @@ export default function ContactPage() {
                     <div className="mb-8 font-bold text-2xl tracking-tight">
                         <span className="text-orange-500">Siri</span> Constructions
                     </div>
-                    <div className="flex justify-center space-x-8 mb-8 text-gray-400">
-                        {['About', 'Services', 'Projects', 'Contact'].map(link => (
-                            <span key={link} className="hover:text-orange-500 cursor-pointer transition-colors">{link}</span>
-                        ))}
-                    </div>
                     <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} Siri Constructions. All Rights Reserved.</p>
                 </div>
             </footer>
